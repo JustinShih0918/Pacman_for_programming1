@@ -107,6 +107,7 @@ void allegro5_init(void) {
         game_abort("failed to initialize primitives add-on");
     // TODO: [Install mouse]
     // Don't forget to check the return value.
+    if(!al_install_mouse()) game_abort("fail to install mouse");
 
     // Malloc mouse buttons state according to button counts.
     const unsigned m_buttons = al_get_mouse_num_buttons();
@@ -117,6 +118,7 @@ void allegro5_init(void) {
 
     al_register_event_source(game_event_queue, al_get_display_event_source(game_display));
     // TODO: [Register mouse to event queue]
+    al_register_event_source(game_event_queue,al_get_mouse_event_source());
     al_register_event_source(game_event_queue, al_get_timer_event_source(game_update_timer));
 
     // Start the timer to update and draw the game.
@@ -136,6 +138,23 @@ void game_start_event_loop(void) {
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             // Event for clicking the window close button.
             done = true;
+        else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+            mouse_state[event.mouse.button] = true;
+        }
+        else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+            mouse_state[event.mouse.button] = false;
+        }
+        else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
+            if (event.mouse.dx != 0 || event.mouse.dy != 0) {
+                // Event for mouse move.
+                game_log("Mouse move to (%d, %d)", event.mouse.x, event.mouse.y);
+                mouse_x = event.mouse.x;
+                mouse_y = event.mouse.y;
+            } else if (event.mouse.dz != 0) {
+                // Event for mouse scroll.
+                game_log("Mouse scroll at (%d, %d) with delta %d", event.mouse.x, event.mouse.y, event.mouse.dz);
+            }
+        }
         // TODO: [Process events]
         // 1) If the event's type is ALLEGRO_EVENT_MOUSE_BUTTON_DOWN, set the
         //    corresponding element in 'mouse_state' to true.
@@ -157,6 +176,16 @@ void game_update(void) {
     // TODO: [Update coordinates]
     // Update 'x' and 'y' according to the current mouse position.
     // Update 'color' according to which mouse button is pressed.
+    x = mouse_x;
+    y = mouse_y;
+     if (mouse_state[1])
+        color = al_map_rgb(255, 255, 255);
+    else if (mouse_state[2])
+        color = al_map_rgb(255, 0, 0);
+    else if (mouse_state[3])
+        color = al_map_rgb(0, 0, 255);
+    else
+        color = al_map_rgb(0, 0, 0);
 }
 
 void game_draw(void) {
