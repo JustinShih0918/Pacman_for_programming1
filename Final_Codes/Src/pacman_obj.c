@@ -33,26 +33,30 @@ static bool pacman_movable(const Pacman* pacman, const Map* M, Directions target
 	// 2) the coordinate data of pacman is stored in pacman->objData.Coord
 	// it is a self-defined pair IntInt type. Trace the code and utilize it.
 
-	/*
-	... pacman->objData.Coord.x, ... pacman->objData.Coord.y;
+	
+	int x = pacman->objData.Coord.x, y = pacman->objData.Coord.y;
 	
 	switch (targetDirec)
 	{
 	case UP:
-		...
+		y -= 1;
+		break;
 	case DOWN:
-		...
+		y += 1;
+		break;
 	case LEFT:
-		...
+		x -= 1;
+		break;
 	case RIGHT:
-		...
+		x += 1;
+		break;
 	default:
 		// for none UP, DOWN, LEFT, RIGHT direction u should return false.
 		return false;
 	}
-	if (is_wall_block(M, ..., ...) || is_room_block(M, ..., ...))
+	if (is_wall_block(M, x, y) || is_room_block(M, x, y))
 		return false;
-	*/
+	
 	return true;
 }
 

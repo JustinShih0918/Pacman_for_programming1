@@ -13,8 +13,9 @@
 
 
 // TODO-HACKATHON 2-0: Create one ghost
+Ghost* ghoats;
 // Just modify the GHOST_NUM to 1
-#define GHOST_NUM 0 
+#define GHOST_NUM 1 
 // TODO-GC-ghost: create a least FOUR ghost!
 /* global variables*/
 extern const uint32_t GAME_TICK_CD;
@@ -64,9 +65,9 @@ static void init(void) {
 	
 	// allocate ghost memory
 	// TODO-HACKATHON 2-1: Allocate dynamic memory for ghosts array.
-	/*
-	ghosts = (...)malloc(sizeof(...) * GHOST_NUM)
-	*/
+	
+	ghosts = (Ghost*)malloc(sizeof(Ghost) * GHOST_NUM);
+	
 	if(!ghosts){
 		game_log("We haven't create any ghosts!\n");
 	}
@@ -74,12 +75,12 @@ static void init(void) {
 		// TODO-HACKATHON 2-2: create a ghost.
 		// Try to look the definition of ghost_create in ghost.h and figure out what should be placed here.
 		for (int i = 0; i < GHOST_NUM; i++) {
-			/*
+			
 			game_log("creating ghost %d\n", i);
-			ghosts[i] = ghost_create(...);  
+			ghosts[i] = ghost_create(i);  
 			if (!ghosts[i])
 				game_abort("error creating ghost\n");
-			*/
+			
 		}
 	}
 	GAME_TICK = 0;
@@ -105,11 +106,11 @@ static void checkItem(void) {
 	if (Grid_y >= basic_map->row_num - 1 || Grid_y <= 0 || Grid_x >= basic_map->col_num - 1 || Grid_x <= 0)
 		return;
 	// TODO-HACKATHON 1-3: check which item you are going to eat and use `pacman_eatItem` to deal with it.
-	/*
-	switch (basic_map->map...)
+	
+	switch (basic_map->map[Grid_y][Grid_x])
 	{
 	case '.':
-		pacman_eatItem(...);
+		pacman_eatItem(pman,'.');
 	case 'P':
 		// TODO-GC-PB: ease power bean
 		// pacman_eatItem(...);
@@ -119,12 +120,12 @@ static void checkItem(void) {
 	default:
 		break;
 	}
-	*/
+
 	// TODO-HACKATHON 1-4: erase the item you eat from map
 	// Be careful, don't erase the wall block.
-	/*
-		basic_map->map...;
-	*/
+	
+	basic_map->map[Grid_y][Grid_x] = ' ';
+	
 }
 static void status_update(void) {
 	// TODO-PB: check powerUp duration
@@ -257,18 +258,17 @@ static void on_key_down(int key_code) {
 	{
 		// TODO-HACKATHON 1-1: Use allegro pre-defined enum ALLEGRO_KEY_<KEYNAME> to controll pacman movement
 		// we provided you a function `pacman_NextMove` to set the pacman's next move direction.
-		/*
 		case ALLEGRO_KEY_W:
-			pacman_NextMove(pman, ...);
+			pacman_NextMove(pman, UP);
 			break;
 		case ALLEGRO_KEY_A:
-			pacman_NextMove(pman, ...);
+			pacman_NextMove(pman, LEFT);
 			break;
 		case ALLEGRO_KEY_S:
-			pacman_NextMove(pman, ...);
+			pacman_NextMove(pman, DOWN);
 			break;
 		case ALLEGRO_KEY_D:
-			pacman_NextMove(pman, ...);
+			pacman_NextMove(pman, RIGHT);
 			break;
 		case ALLEGRO_KEY_C:
 			cheat_mode = !cheat_mode;
@@ -280,7 +280,6 @@ static void on_key_down(int key_code) {
 		case ALLEGRO_KEY_G:
 			debug_mode = !debug_mode;
 			break;
-		*/
 	default:
 		break;
 	}
