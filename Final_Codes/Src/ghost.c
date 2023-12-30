@@ -173,27 +173,31 @@ bool ghost_movable(const Ghost* ghost, const Map* M, Directions targetDirec, boo
 	// So if you have finished (and you should), you can just "copy and paste"
 	// and do some small alternation.
 
-	/*
-	... ghost->objData.Coord.x, ... ghost->objData.Coord.y;
+	
+	int x = ghost->objData.Coord.x, y = ghost->objData.Coord.y;
 
 	switch (targetDirec) 
 	{
 	case UP:
-		...
+		y -= 1;
+		break;
 	case DOWN:
-		...
+		y += 1;
+		break;
 	case LEFT:
-		...
+		x -= 1;
+		break;
 	case RIGHT:
-		...
+		x += 1;
+		break;
 	default:
 		// for none UP, DOWN, LEFT, RIGHT direction u should return false.
 		return false;
 	}
 
-	if (is_wall_block(M, ..., ...) || (room && is_room_block(M, ..., ...)))
+	if (is_wall_block(M, x, y) || (room && is_room_block(M, x, y)))
 		return false;
-	*/
+	
 
 	return true;
 

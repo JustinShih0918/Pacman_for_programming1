@@ -22,13 +22,13 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	// TODO-HACKATHON 2-4: Uncomment the following code and finish pacman picking random direction.
 	// hint: see generateRandomNumber in utility.h
 
-	/*
+	
 	static Directions proba[4]; // possible movement
 	int cnt = 0;
 	for (Directions i = 1; i <= 4; i++)
-		if (ghost_movable(...)) 	proba[cnt++] = i;
-	ghost_NextMove(ghost, proba[generateRandomNumber(...)]);
-	*/
+		if (ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
+	ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt)]);
+	
 
 	// TODO-GC-random_movement: (Not in Hackathon) 
 	// Description:
