@@ -13,9 +13,8 @@
 
 
 // TODO-HACKATHON 2-0: Create one ghost
-Ghost* ghoats;
 // Just modify the GHOST_NUM to 1
-#define GHOST_NUM 1 
+#define GHOST_NUM 2 
 // TODO-GC-ghost: create a least FOUR ghost!
 /* global variables*/
 extern const uint32_t GAME_TICK_CD;
@@ -65,7 +64,6 @@ static void init(void) {
 	
 	// allocate ghost memory
 	// TODO-HACKATHON 2-1: Allocate dynamic memory for ghosts array.
-	
 	ghosts = (Ghost*)malloc(sizeof(Ghost) * GHOST_NUM);
 	
 	if(!ghosts){
