@@ -27,7 +27,7 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	int cnt = 0;
 	for (Directions i = 1; i <= 4; i++)
 		if (ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
-	ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt)]);
+	ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	
 
 	// TODO-GC-random_movement: (Not in Hackathon) 
