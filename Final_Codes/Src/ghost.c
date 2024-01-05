@@ -132,23 +132,75 @@ void ghost_draw(Ghost* ghost) {
 	else if (ghost->status == GO_IN) {
 		// TODO-PB-animation: ghost going animation
 		// *draw ghost->dead_sprite
-		/*
+		
 		switch (ghost->objData.facing)
 		{
-		case LEFT:
-			...
-		*/
+			case LEFT:
+				al_draw_scaled_bitmap(ghost->dead_sprite, 16, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case RIGHT:
+				al_draw_scaled_bitmap(ghost->dead_sprite, 0, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case UP:
+				al_draw_scaled_bitmap(ghost->dead_sprite, 32, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case DOWN:
+				al_draw_scaled_bitmap(ghost->dead_sprite, 48, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+		}
 	}
 	else {
 		// TODO-GC-animation: ghost animation
 		// *draw ghost->move_sprite
-		/*
+		
 		switch (ghost->objData.facing)
 		{
 		case LEFT:
-			...
+				al_draw_scaled_bitmap(ghost->move_sprite, 32, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case RIGHT:
+				al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case UP:
+				al_draw_scaled_bitmap(ghost->move_sprite, 64, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
+			case DOWN:
+				al_draw_scaled_bitmap(ghost->move_sprite, 96, 0,
+						16, 16,
+						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+						draw_region, draw_region, 0
+					);
+			break;
 		}
-		*/
+		
 	}
 
 }
