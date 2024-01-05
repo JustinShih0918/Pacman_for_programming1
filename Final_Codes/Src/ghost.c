@@ -3,6 +3,7 @@
 #include "ghost.h"
 #include "map.h"
 #include "pacman_obj.h"
+#include "scene_game.h"
 
 /* global variables*/
 // [ NOTE ]
@@ -101,21 +102,32 @@ void ghost_draw(Ghost* ghost) {
 		/* hint: try to add some function in scene_game.h and scene_game.c that
 			gets the value of `power_up_timer` and `power_up_duration`.
 		*/ 
-		/*
-			if (it has run out of 70% of the time of power mode  )
+
+		
+			if (get_PowerUp_Time()*0.7>=7)
 			{
 				// alternately draw blue and white sprites
-				if (ghost->objData.moveCD >> 4)& 1) {
-					bitmap_x_offset = ...;
+				if ((ghost->objData.moveCD >> 4)& 1) {
+					bitmap_x_offset = 32;
 				}
-				al_draw_scaled_bitmap(...)
+				else bitmap_x_offset = 0;
+
+				al_draw_scaled_bitmap(ghost->move_sprite, 0+bitmap_x_offset, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			}
 			else 
 			{
 				// draw only blue sprite
-				al_draw_scaled_bitmap(...)
+				al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			}
-		*/
+		
 	}
 	else if (ghost->status == GO_IN) {
 		// TODO-PB-animation: ghost going animation

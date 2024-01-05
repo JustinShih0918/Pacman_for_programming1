@@ -330,3 +330,7 @@ Scene scene_main_create(void) {
 	game_log("Start scene created");
 	return scene;
 }
+
+int64_t get_PowerUp_Time(){
+	return al_get_timer_count(power_up_timer);
+}
