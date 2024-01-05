@@ -23,11 +23,11 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	// hint: see generateRandomNumber in utility.h
 
 	
-	static Directions proba[4]; // possible movement
-	int cnt = 0;
-	for (Directions i = 1; i <= 4; i++)
-		if (ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
-	ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
+	// static Directions proba[4]; // possible movement
+	// int cnt = 0;
+	// for (Directions i = 1; i <= 4; i++)
+	// 	if (ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
+	// ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	
 
 	// TODO-GC-random_movement: (Not in Hackathon) 
@@ -38,25 +38,34 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	// (The code above DO perform walking back and forth.)
 	// Replace the above code by finish followings.
 	// hint: record the previous move, and skip it when adding direction into array proba
-	/*
-	Direction counter_one = RIGHT;
+	
+	Directions counter_one = RIGHT;
 	switch(ghost->objData.preMove) {
 		case RIGHT:
 			counter_one = LEFT;
-		case ...
+			break;
+		case LEFT:
+			counter_one = RIGHT;
+			break;
+		case UP:
+			counter_one = DOWN;
+			break;
+		case DOWN:
+			counter_one = UP;
+			break;
 	}
 
 	static Directions proba[4]; // possible movement
 	int cnt = 0;
 	for (Directions i = 1; i <= 4; i++)
-		if (i != counter_one && ghost_movable(...)) 	proba[cnt++] = i;
+		if (i != counter_one && ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
 	if (cnt >= 1) {
-		ghost_NextMove(ghost, proba[generateRandomNumber(...)]);
+		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	}
 	else { // for the dead end case
-		ghost_NextMove(ghost, ...);
+		ghost_NextMove(ghost, proba[0]);
 	}
-	*/
+	
 }
 
 static void ghost_move_script_FREEDOM_shortest_path(Ghost* ghost, Map* M, Pacman* pman)
@@ -107,13 +116,39 @@ static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M) {
 
 static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pacman) {
 	Directions shortestDirection = shortest_path_direc(M, ghost->objData.Coord.x, ghost->objData.Coord.y, pacman->objData.Coord.x, pacman->objData.Coord.y);
+	//wait for testing
 	// TODO-PB: escape from pacman
 	// Description:
 	// The concept here is to simulate ghosts running away from pacman while pacman is having power bean ability.
 	// To achieve this, think in this way. We first get the direction to shortest path to pacman, call it K (K is either UP, DOWN, RIGHT or LEFT).
 	// Then we choose other available direction rather than direction K.
 	// In this way, ghost will escape from pacman.
+	Directions counter_one = RIGHT;
+	switch(ghost->objData.preMove) {
+		case RIGHT:
+			counter_one = LEFT;
+			break;
+		case LEFT:
+			counter_one = RIGHT;
+			break;
+		case UP:
+			counter_one = DOWN;
+			break;
+		case DOWN:
+			counter_one = UP;
+			break;
+	}
 
+	static Directions proba[4]; // possible movement
+	int cnt = 0;
+	for (Directions i = 1; i <= 4; i++)
+		if (i != counter_one && ghost_movable(ghost,M,i,false) && i!= shortest_path_direc) 	proba[cnt++] = i;
+	if (cnt >= 1) {
+		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
+	}
+	else { // for the dead end case
+		ghost_NextMove(ghost, proba[0]);
+	}
 }
 
 void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {

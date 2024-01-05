@@ -209,21 +209,21 @@ void ghost_toggle_FLEE(Ghost* ghost, bool setFLEE) {
 	// For those who are not (BLOCK, GO_IN, etc.), they won't change state.
 	// Spec above is based on the classic PACMAN game.
 	// setFLEE = true => set to FLEE, setFLEE = false => reset to FREEDOM
-	/*
+	
 	if(setFLEE){
 		// set FREEDOM ghost's status to FLEE and make them slow 
-		if(... == FREEDOM){
-			...
+		if(ghost->status == FREEDOM){
+			ghost->status = FLEE;
 			ghost->speed = 1;
 		}
 	}else{
 		// set FLEE ghost's status to FREESOME and them down
-		if(... == FLEE){
-			...
+		if(ghost->status == FLEE){
+			ghost->status = FREEDOM;
 			ghost->speed = 2;
 		}
 	}
-	*/
+	
 }
 
 void ghost_collided(Ghost* ghost) {
