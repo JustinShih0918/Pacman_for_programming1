@@ -58,14 +58,14 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	static Directions proba[4]; // possible movement
 	int cnt = 0;
 	for (Directions i = 1; i <= 4; i++)
-		if (i != counter_one && ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
+		if (i != counter_one && ghost_movable(ghost,M,i,true)) 	proba[cnt++] = i;
 	if (cnt >= 1) {
 		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	}
 	else { // for the dead end case
-		ghost_NextMove(ghost, proba[0]);
+		ghost_NextMove(ghost, NONE);
 	}
-	
+	ghost->objData.preMove = ghost->objData.nextTryMove;
 }
 
 static void ghost_move_script_FREEDOM_shortest_path(Ghost* ghost, Map* M, Pacman* pman)
@@ -142,7 +142,7 @@ static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pa
 	static Directions proba[4]; // possible movement
 	int cnt = 0;
 	for (Directions i = 1; i <= 4; i++)
-		if (i != counter_one && ghost_movable(ghost,M,i,false) && i!= shortest_path_direc) 	proba[cnt++] = i;
+		if (i != counter_one && ghost_movable(ghost,M,i,true) && i!= shortest_path_direc) 	proba[cnt++] = i;
 	if (cnt >= 1) {
 		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	}
