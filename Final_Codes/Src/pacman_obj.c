@@ -70,7 +70,7 @@ Pacman* pacman_create() {
 	pman->objData.Coord.y = 24;
 	pman->objData.Size.x = block_width;
 	pman->objData.Size.y = block_height;
-
+	pman->objData.facing = 0; 
 	pman->objData.preMove = NONE;
 	pman->objData.nextTryMove = NONE;
 	pman->speed = basic_speed;
@@ -101,11 +101,14 @@ void pacman_draw(Pacman* pman) {
 	RecArea drawArea = getDrawArea((object *)pman, GAME_TICK_CD);
 
 	// Draw default image
-	al_draw_scaled_bitmap(pman->move_sprite, 0, 0,
-		16, 16,
-		drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-		draw_region, draw_region, 0
-		);
+	if(!pman->objData.facing){
+		al_draw_scaled_bitmap(pman->move_sprite, 0, 0,
+			16, 16,
+			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+			draw_region, draw_region, 0
+			);
+	}
+	
 
 	int offset = 0;
 	if (!game_over) {

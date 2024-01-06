@@ -136,7 +136,6 @@ static void status_update(void) {
 		// Check the value of power_up_timer
 		// If runs out of time reset all relevant variables and ghost's status
 		// hint: ghost_toggle_FLEE
-		//wait for testing
 		if(get_PowerUp_Time()==power_up_duration){
 			for(int i = 0;i<GHOST_NUM;i++){
 				ghost_toggle_FLEE(ghosts[i],false);
