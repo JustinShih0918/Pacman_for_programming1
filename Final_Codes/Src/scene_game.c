@@ -109,10 +109,11 @@ static void checkItem(void) {
 	{
 	case '.':
 		pacman_eatItem(pman,'.');
+		break;
 	case 'P':
 		// TODO-GC-PB: ease power bean
 		pacman_eatItem(pman,'P');
-		al_stop_timer(power_up_timer);
+		al_set_timer_count(power_up_timer,0);
 		al_start_timer(power_up_timer);
 		// stop and reset power_up_timer value
 		// start the timer
@@ -138,9 +139,15 @@ static void status_update(void) {
 		//wait for testing
 		if(get_PowerUp_Time()==power_up_duration){
 			for(int i = 0;i<GHOST_NUM;i++){
-				ghost_toggle_FLEE(ghosts[i],0);
+				ghost_toggle_FLEE(ghosts[i],false);
 			}
-			pman->powerUp = 0;
+			pman->powerUp = false;
+		}
+		else{
+			for(int i = 0;i<GHOST_NUM;i++){
+				ghost_toggle_FLEE(ghosts[i],true);
+			}
+			game_log("%d\n",get_PowerUp_Time());
 		}
 		
 	}
@@ -263,10 +270,7 @@ static void destroy(void) {
 	for(int i = 0;i<GHOST_NUM;i++){
 		ghost_destroy(ghosts[i]);
 	}
-	for(int i = 0;i<basic_map->row_num;i++){
-		free(basic_map->map[i]);
-	}
-	free(basic_map->map);
+	delete_map(basic_map);
 }
 
 static void on_key_down(int key_code) {

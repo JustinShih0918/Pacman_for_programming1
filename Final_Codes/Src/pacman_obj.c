@@ -167,7 +167,7 @@ void pacman_draw(Pacman* pman) {
 		// refer al_get_timer_count and al_draw_scaled_bitmap. Suggestion frame rate: 8fps.
 		offset = 0;
 		if(al_get_timer_count(pman->death_anim_counter)%8==0){
-			al_draw_scaled_bitmap(pman->move_sprite,  0+ offset, 0,
+			al_draw_scaled_bitmap(pman->die_sprite,  0+ offset, 0,
 				16, 16,
 				drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 				draw_region, draw_region, 0
@@ -221,7 +221,7 @@ void pacman_eatItem(Pacman* pacman, const char Item) {
 		break;
 	// TODO-GC-PB: set pacman powerUp mode
 	case 'P':
-		pacman->powerUp = 1;
+		pacman->powerUp = true;
 		break;
 	default:
 		break;
