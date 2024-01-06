@@ -147,7 +147,7 @@ static void status_update(void) {
 			for(int i = 0;i<GHOST_NUM;i++){
 				ghost_toggle_FLEE(ghosts[i],true);
 			}
-			game_log("%d\n",get_PowerUp_Time());
+			//game_log("%d\n",get_PowerUp_Time());
 		}
 		
 	}
