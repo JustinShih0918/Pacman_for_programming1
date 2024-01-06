@@ -147,8 +147,9 @@ static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pa
 		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	}
 	else { // for the dead end case
-		ghost_NextMove(ghost, proba[0]);
+		ghost_NextMove(ghost, NONE);
 	}
+	ghost->objData.preMove = ghost->objData.nextTryMove;
 }
 
 void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {
@@ -222,7 +223,9 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 				ghost->status = GO_OUT;
 			break;
 		case FREEDOM:
+		//wait for testing
 			ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
+			ghost_move_script_FREEDOM_random(ghost,M);
 			break;
 		case GO_OUT:
 			ghost_move_script_GO_OUT(ghost, M);
