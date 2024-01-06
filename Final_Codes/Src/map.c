@@ -62,7 +62,6 @@ Map* create_map(const char * filepath) {
 		M->row_num = 30;
 		M->col_num = 36;
 		game_log("Creating from default map. row = %d col = %d", M->row_num, M->col_num);
-		
 	}
 	else {
 		// TODO-GC-read_txt: use fopen to open a file stream
@@ -73,18 +72,9 @@ Map* create_map(const char * filepath) {
 		pFile = fopen(filepath, "r");
 		if (!pFile) {
 			game_log("!pFile");
-			game_abort("error to open map file\n");
 			return NULL;
-		}
-		if(fscanf(pFile,"%s") != 2) {
-			game_abort("Map format unmatched\n");
-			return NULL;
-		}
-		while(getc(pFile) != '\n'){
-			game_log("here?");
 		}
 	}
-	game_log("successfully log the path into pFile");
 	/*
 		Allocate a 2-Dimension dynamic char array for recording Map at M->map 
 	*/
@@ -100,7 +90,6 @@ Map* create_map(const char * filepath) {
 			return NULL;
 		}
 	}
-	game_log("successfully allocate the map");
 	M->wallnum = M->beansCount = 0; // * Record the number of beans and walls, which can be used to print score or other usage.
 	for (int i = 0; i < M->row_num; i++) {
 		for (int j = 0; j < M->col_num; j++) {
@@ -112,7 +101,7 @@ Map* create_map(const char * filepath) {
 				// '.' -> beans
 				// 'B' -> room of ghost
 				// 'P' -> Power Bean 
-				fscanf(pFile,"%c",M->map[i][j]);
+				fscanf(pFile,"%c",&M->map[i][j]);
 			switch(M->map[i][j]) {
 			case '#':
 				M->wallnum++;
