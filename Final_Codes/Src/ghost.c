@@ -39,7 +39,7 @@ Ghost* ghost_create(int flag) {
 	ghost->typeFlag = flag;
 	ghost->objData.Size.x = block_width;
 	ghost->objData.Size.y = block_height;
-
+	ghost->objData.facing = NONE;
 	ghost->objData.nextTryMove = NONE;
 	ghost->speed = basic_speed;
 	ghost->status = BLOCKED;
@@ -93,14 +93,17 @@ void ghost_destroy(Ghost* ghost) {
 	free(ghost);
 }
 void ghost_draw(Ghost* ghost) {
+	game_log("%d",ghost->status);
 	RecArea drawArea = getDrawArea((object*)ghost, GAME_TICK_CD);
 
 	//Draw default image
-	al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
-		16, 16,
-		drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-		draw_region, draw_region, 0
-	);
+	if(!ghost->objData.facing){
+		al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+			16, 16,
+			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+			draw_region, draw_region, 0
+		);
+	}
 	// Draw ghost according to its status and use ghost->objData.moveCD value to determine which frame of the animation to draw.
 	// hint: please refer comments in pacman_draw 
 	// Since ghost has more status, we suggest you finish pacman_draw first. The logic is very similar.
@@ -145,33 +148,33 @@ void ghost_draw(Ghost* ghost) {
 		
 		switch (ghost->objData.facing)
 		{
-			case LEFT:
-				al_draw_scaled_bitmap(ghost->dead_sprite, 16, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
+		case LEFT:
+			al_draw_scaled_bitmap(ghost->dead_sprite, 16, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			break;
-			case RIGHT:
-				al_draw_scaled_bitmap(ghost->dead_sprite, 0, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
+		case RIGHT:
+			al_draw_scaled_bitmap(ghost->dead_sprite, 0, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			break;
-			case UP:
-				al_draw_scaled_bitmap(ghost->dead_sprite, 32, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
+		case UP:
+			al_draw_scaled_bitmap(ghost->dead_sprite, 32, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			break;
-			case DOWN:
-				al_draw_scaled_bitmap(ghost->dead_sprite, 48, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
+		case DOWN:
+			al_draw_scaled_bitmap(ghost->dead_sprite, 48, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
 			break;
 		}
 	}
