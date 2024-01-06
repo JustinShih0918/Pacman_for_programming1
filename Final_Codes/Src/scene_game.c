@@ -111,7 +111,9 @@ static void checkItem(void) {
 		pacman_eatItem(pman,'.');
 	case 'P':
 		// TODO-GC-PB: ease power bean
-		// pacman_eatItem(...);
+		pacman_eatItem(pman,'P');
+		al_stop_timer(power_up_timer);
+		al_start_timer(power_up_timer);
 		// stop and reset power_up_timer value
 		// start the timer
 		break;
@@ -127,14 +129,22 @@ static void checkItem(void) {
 }
 static void status_update(void) {
 	// TODO-PB: check powerUp duration
-	/*
+	
 	if (pman->powerUp)
 	{
 		// Check the value of power_up_timer
 		// If runs out of time reset all relevant variables and ghost's status
 		// hint: ghost_toggle_FLEE
+		//wait for testing
+		if(get_PowerUp_Time()==0){
+			for(int i = 0;i<GHOST_NUM;i++){
+				ghost_toggle_FLEE(ghosts[i],0);
+			}
+			pman->powerUp = 0;
+		}
+		
 	}
-	*/
+	
 
 
 	for (int i = 0; i < GHOST_NUM; i++) {
