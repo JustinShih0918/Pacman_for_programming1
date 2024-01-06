@@ -71,14 +71,11 @@ Ghost* ghost_create(int flag) {
 	}
 	return ghost;
 }
-void ghost_destory(Ghost* ghost) {
+void ghost_destroy(Ghost* ghost) {
 	// TODO-GC-memory: free ghost resource
-
-	/*
-		al_destory_bitmap(...);
-		...
-		free(ghost);
-	*/
+	al_destroy_bitmap(ghost->flee_sprite);
+	al_destroy_bitmap(ghost->dead_sprite);
+	free(ghost);
 }
 void ghost_draw(Ghost* ghost) {
 	RecArea drawArea = getDrawArea((object*)ghost, GAME_TICK_CD);
@@ -89,7 +86,6 @@ void ghost_draw(Ghost* ghost) {
 		drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 		draw_region, draw_region, 0
 	);
-
 	// Draw ghost according to its status and use ghost->objData.moveCD value to determine which frame of the animation to draw.
 	// hint: please refer comments in pacman_draw 
 	// Since ghost has more status, we suggest you finish pacman_draw first. The logic is very similar.
@@ -104,29 +100,28 @@ void ghost_draw(Ghost* ghost) {
 		*/ 
 
 		
-			if (get_PowerUp_Time()*0.7>=7)
-			{
-				// alternately draw blue and white sprites
-				if ((ghost->objData.moveCD >> 4)& 1) {
-					bitmap_x_offset = 32;
-				}
-				else bitmap_x_offset = 0;
-
-				al_draw_scaled_bitmap(ghost->move_sprite, 0+bitmap_x_offset, 0,
-					16, 16,
-					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-					draw_region, draw_region, 0
-				);
+		if (get_PowerUp_Time()*0.7>=7)
+		{
+			// alternately draw blue and white sprites
+			if ((ghost->objData.moveCD >> 4)& 1) {
+				bitmap_x_offset = 32;
 			}
-			else 
-			{
-				// draw only blue sprite
-				al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+			else bitmap_x_offset = 0;
+			al_draw_scaled_bitmap(ghost->move_sprite, 0+bitmap_x_offset, 0,
 					16, 16,
-					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-					draw_region, draw_region, 0
-				);
-			}
+				drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+				draw_region, draw_region, 0
+			);
+		}
+		else 
+		{
+			// draw only blue sprite
+			al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+				16, 16,
+				drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+				draw_region, draw_region, 0
+			);
+		}
 		
 	}
 	else if (ghost->status == GO_IN) {
@@ -178,27 +173,27 @@ void ghost_draw(Ghost* ghost) {
 						draw_region, draw_region, 0
 					);
 			break;
-			case RIGHT:
-				al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
-			break;
-			case UP:
-				al_draw_scaled_bitmap(ghost->move_sprite, 64, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
-			break;
-			case DOWN:
-				al_draw_scaled_bitmap(ghost->move_sprite, 96, 0,
-						16, 16,
-						drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-						draw_region, draw_region, 0
-					);
-			break;
+		case RIGHT:
+			al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
+		break;
+		case UP:
+			al_draw_scaled_bitmap(ghost->move_sprite, 64, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
+		break;
+		case DOWN:
+			al_draw_scaled_bitmap(ghost->move_sprite, 96, 0,
+					16, 16,
+					drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+					draw_region, draw_region, 0
+				);
+		break;
 		}
 		
 	}
