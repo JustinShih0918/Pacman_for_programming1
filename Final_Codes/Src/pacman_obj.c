@@ -85,6 +85,7 @@ Pacman* pacman_create() {
 }
 
 void pacman_destroy(Pacman* pman) {	
+	// Memory
 	// TODO-GC-memory: free pacman resource
 	
 	al_destroy_bitmap(pman->move_sprite);
@@ -96,6 +97,7 @@ void pacman_destroy(Pacman* pman) {
 }
 
 void pacman_draw(Pacman* pman) {
+	// Finish
 	// TODO-GC-animation: Draw Pacman and animations
 	// hint: use pman->objData.moveCD to determine which frame of the animation to draw
 	RecArea drawArea = getDrawArea((object *)pman, GAME_TICK_CD);
@@ -112,6 +114,7 @@ void pacman_draw(Pacman* pman) {
 
 	int offset = 0;
 	if (!game_over) {
+		// Finish
 		// TODO-GC-animation: We have two frames for each direction. You can use the value of pman->objData.moveCD to determine which frame of the animation to draw.
 		// For example, if the value(mode 16) is less than 8, draw 1st feame. Otherwise, draw 2nd frame.
 		// But this frame rate may be a little bit too high. We can use % 32 and draw 1st frame if value is 0~15, and 2nd frame if value is 16~31.
@@ -222,6 +225,7 @@ void pacman_eatItem(Pacman* pacman, const char Item) {
 		stop_bgm(PACMAN_MOVESOUND_ID);
 		PACMAN_MOVESOUND_ID = play_audio(PACMAN_MOVESOUND, effect_volume);
 		break;
+	// Finish
 	// TODO-GC-PB: set pacman powerUp mode
 	case 'P':
 		pacman->powerUp = true;
@@ -238,6 +242,7 @@ void pacman_NextMove(Pacman* pacman, Directions next) {
 void pacman_die() {
 	// TODO-GC-game_over: play sound of pacman's death! see shared.c
 	// hint: check pacman_eatItem(...) above.
+	// wait for testing
 	stop_bgm(PACMAN_MOVESOUND_ID);
 	PACMAN_MOVESOUND_ID = play_audio(PACMAN_DEATH_SOUND, effect_volume);
 }

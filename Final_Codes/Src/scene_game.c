@@ -15,6 +15,7 @@
 // TODO-HACKATHON 2-0: Create one ghost
 // Just modify the GHOST_NUM to 1
 #define GHOST_NUM 4
+// Finish
 // TODO-GC-ghost: create a least FOUR ghost!
 /* global variables*/
 extern const uint32_t GAME_TICK_CD;
@@ -51,6 +52,7 @@ static void init(void) {
 	game_main_Score = 0;
 	// create map
 	//basic_map = create_map(NULL);
+	// Finish
 	// TODO-GC-read_txt: Create map from .txt file so that you can design your own map!!
 	basic_map = create_map("Assets/map_nthu.txt");
 	if (!basic_map) {
@@ -111,6 +113,7 @@ static void checkItem(void) {
 		pacman_eatItem(pman,'.');
 		break;
 	case 'P':
+		// Finish
 		// TODO-GC-PB: ease power bean
 		pacman_eatItem(pman,'P');
 		al_set_timer_count(power_up_timer,0);
@@ -264,6 +267,7 @@ static void printinfo(void) {
 
 
 static void destroy(void) {
+	// Memory
 	// TODO-GC-memory: free map array, Pacman and ghosts
 	pacman_destroy(pman);
 	for(int i = 0;i<GHOST_NUM;i++){

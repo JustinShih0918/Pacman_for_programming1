@@ -29,7 +29,7 @@ static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	// 	if (ghost_movable(ghost,M,i,false)) 	proba[cnt++] = i;
 	// ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	
-
+	// Finish
 	// TODO-GC-random_movement: (Not in Hackathon) 
 	// Description:
 	// For red(Blinky) ghost, we ask you to implement an random strategy ghost, 

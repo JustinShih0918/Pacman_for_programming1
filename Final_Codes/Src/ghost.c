@@ -46,7 +46,7 @@ Ghost* ghost_create(int flag) {
 
 	ghost->flee_sprite = load_bitmap("Assets/ghost_flee.png");
 	ghost->dead_sprite = load_bitmap("Assets/ghost_dead.png");
-
+	// Finish
 	// TODO-GC-ghost: Create other type ghost, load corresponding sprites.
 	// TODO-IF: You may design your own special tracking rules.
 	switch (ghost->typeFlag) {
@@ -85,6 +85,7 @@ Ghost* ghost_create(int flag) {
 	return ghost;
 }
 void ghost_destroy(Ghost* ghost) {
+	// Memory
 	// TODO-GC-memory: free ghost resource
 	al_destroy_bitmap(ghost->flee_sprite);
 	al_destroy_bitmap(ghost->dead_sprite);
@@ -175,6 +176,7 @@ void ghost_draw(Ghost* ghost) {
 		}
 	}
 	else {
+		// Finish
 		// TODO-GC-animation: ghost animation
 		// *draw ghost->move_sprite
 		
