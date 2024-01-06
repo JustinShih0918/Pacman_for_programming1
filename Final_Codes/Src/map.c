@@ -156,10 +156,9 @@ void delete_map(Map* M) {
 	if(M->map)
 	{
 		for (int i = 0; i < M->row_num; i++) {
-			for (int j = 0; j < M->col_num; j++) {
-				free(M->map[i][j]);
-			}
+			free(M->map[i]);
 		}
+		free(M->map);
 	}
 	free(M);
 }

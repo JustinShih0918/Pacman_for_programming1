@@ -88,6 +88,7 @@ void ghost_destroy(Ghost* ghost) {
 	// TODO-GC-memory: free ghost resource
 	al_destroy_bitmap(ghost->flee_sprite);
 	al_destroy_bitmap(ghost->dead_sprite);
+	al_destroy_bitmap(ghost->move_sprite);
 	free(ghost);
 }
 void ghost_draw(Ghost* ghost) {
@@ -113,14 +114,14 @@ void ghost_draw(Ghost* ghost) {
 		*/ 
 
 		
-		if (get_PowerUp_Time()*0.7>=7)
+		if (get_PowerUp_Time()>=6)
 		{
 			// alternately draw blue and white sprites
 			if ((ghost->objData.moveCD >> 4)& 1) {
 				bitmap_x_offset = 32;
 			}
 			else bitmap_x_offset = 0;
-			al_draw_scaled_bitmap(ghost->move_sprite, 0+bitmap_x_offset, 0,
+			al_draw_scaled_bitmap(ghost->flee_sprite, 0+bitmap_x_offset, 0,
 					16, 16,
 				drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 				draw_region, draw_region, 0
@@ -129,7 +130,7 @@ void ghost_draw(Ghost* ghost) {
 		else 
 		{
 			// draw only blue sprite
-			al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
+			al_draw_scaled_bitmap(ghost->flee_sprite, 0, 0,
 				16, 16,
 				drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 				draw_region, draw_region, 0
