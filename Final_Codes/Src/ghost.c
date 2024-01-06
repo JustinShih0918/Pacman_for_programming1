@@ -93,7 +93,6 @@ void ghost_destroy(Ghost* ghost) {
 	free(ghost);
 }
 void ghost_draw(Ghost* ghost) {
-	game_log("%d",ghost->status);
 	RecArea drawArea = getDrawArea((object*)ghost, GAME_TICK_CD);
 
 	//Draw default image

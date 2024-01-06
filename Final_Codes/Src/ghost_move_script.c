@@ -100,7 +100,7 @@ static void ghost_move_script_GO_IN(Ghost* ghost, Map* M) {
 	// `shortest_path_direc` is a function that returns the direction of shortest path.
 	// Check `map.c` for its detail usage.
 	// For GO_IN state.
-	ghost->objData.nextTryMove = shortest_path_direc(M, ghost->objData.Coord.x, ghost->objData.Coord.y, cage_grid_x, cage_grid_y);
+	ghost->objData.nextTryMove = shortest_path_direc(M, ghost->objData.Coord.x, ghost->objData.Coord.y, cage_grid_x, cage_grid_y);	
 }
 
 static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M) {
@@ -117,6 +117,7 @@ static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M) {
 static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pacman) {
 	Directions shortestDirection = shortest_path_direc(M, ghost->objData.Coord.x, ghost->objData.Coord.y, pacman->objData.Coord.x, pacman->objData.Coord.y);
 	//wait for testing
+	//ghost is not running away from pacman, maybe
 	// TODO-PB: escape from pacman
 	// Description:
 	// The concept here is to simulate ghosts running away from pacman while pacman is having power bean ability.
@@ -224,6 +225,7 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 			break;
 		case FREEDOM:
 		//wait for testing
+		//not sure if this is strong enough
 			ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
 			ghost_move_script_FREEDOM_random(ghost,M);
 			break;

@@ -163,7 +163,8 @@ static void status_update(void) {
 			continue;
 		}
 		else if (ghosts[i]->status == FREEDOM)
-		{
+		{	
+			// Finish
 			// TODO-GC-game_over: use `getDrawArea(..., GAME_TICK_CD)` and `RecAreaOverlap(..., GAME_TICK_CD)` functions to detect if pacman and ghosts collide with each other.
 			// And perform corresponding operations.
 			// [NOTE] You should have some if-else branch here if you want to implement power bean mode.
@@ -182,7 +183,7 @@ static void status_update(void) {
 		else if (ghosts[i]->status == FLEE)
 		{
 			// TODO-GC-PB: if ghost is collided by pacman, it should go back to the cage immediately and come out after a period.
-			
+			// Finish
 			if(!cheat_mode && RecAreaOverlap(&pmanRec, &ghostRec))
 			{
 				ghost_collided(ghosts[i]);
@@ -203,6 +204,15 @@ static void update(void) {
 			// stop the timer if counter reach desired time.
 			game_change_scene(...);
 		*/
+		// wait for testing
+		// not working
+		if(!al_get_timer_started(pman->death_anim_counter))
+			al_start_timer(pman->death_anim_counter);
+
+		if(al_get_timer_count(pman->death_anim_counter)==80)
+			al_stop_timer(pman->death_anim_counter);
+		al_rest(1.0);
+		game_change_scene(scene_menu_create());
 		return;
 	}
 
@@ -220,9 +230,9 @@ static void draw(void) {
 
 	
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
-	/*
-		al_draw_text(...);
-	*/
+	// wait for testing
+		//al_draw_text(font_pirulen_24,al_map_rgb(255,255,255),0,0,0,"Testing");
+	
 
 	draw_map(basic_map);
 
