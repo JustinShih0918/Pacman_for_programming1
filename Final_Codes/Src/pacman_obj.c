@@ -1,6 +1,7 @@
 #include <allegro5/allegro_primitives.h>
 #include "pacman_obj.h"
 #include "map.h"
+#include "shared.h"
 /* Static variables */
 static const int start_grid_x = 25, start_grid_y = 25;		// where to put pacman at the beginning
 static const int fix_draw_pixel_offset_x = -3, fix_draw_pixel_offset_y = -3;  // draw offset 
@@ -85,14 +86,14 @@ Pacman* pacman_create() {
 
 void pacman_destroy(Pacman* pman) {	
 	// TODO-GC-memory: free pacman resource
-	/*
-		al_destroy_bitmap(pman->...);
-		al_destroy_timer(pman->...);
-		...
-		free(pman);
-	*/
-}
+	
+	al_destroy_bitmap(pman->move_sprite);
+	al_destroy_bitmap(pman->die_sprite);
+	al_destroy_timer(pman->death_anim_counter);
 
+	free(pman);
+	
+}
 
 void pacman_draw(Pacman* pman) {
 	// TODO-GC-animation: Draw Pacman and animations
@@ -104,8 +105,8 @@ void pacman_draw(Pacman* pman) {
 		16, 16,
 		drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 		draw_region, draw_region, 0
-	);
-	
+		);
+
 	int offset = 0;
 	if (!game_over) {
 		// TODO-GC-animation: We have two frames for each direction. You can use the value of pman->objData.moveCD to determine which frame of the animation to draw.
@@ -160,7 +161,7 @@ void pacman_draw(Pacman* pman) {
 		
 	}
 	else {
-		// wait for check
+		// wait for testing
 		// TODO-GC-animation: Draw die animation(pman->die_sprite)
 		// hint: instead of using pman->objData.moveCD, use pman->death_anim_counter to create animation.
 		// refer al_get_timer_count and al_draw_scaled_bitmap. Suggestion frame rate: 8fps.
@@ -219,11 +220,11 @@ void pacman_eatItem(Pacman* pacman, const char Item) {
 		PACMAN_MOVESOUND_ID = play_audio(PACMAN_MOVESOUND, effect_volume);
 		break;
 	// TODO-GC-PB: set pacman powerUp mode
-	/*
+	
 	case 'P':
-		...
+		pacman->powerUp = 1;
 		break;
-	*/
+	
 	default:
 		break;
 	}
@@ -236,4 +237,6 @@ void pacman_NextMove(Pacman* pacman, Directions next) {
 void pacman_die() {
 	// TODO-GC-game_over: play sound of pacman's death! see shared.c
 	// hint: check pacman_eatItem(...) above.
+	stop_bgm(PACMAN_MOVESOUND_ID);
+	PACMAN_MOVESOUND_ID = play_audio(PACMAN_DEATH_SOUND, effect_volume);
 }
