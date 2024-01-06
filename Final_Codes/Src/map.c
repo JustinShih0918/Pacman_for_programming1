@@ -52,7 +52,6 @@ const char* nthu_map[] = {
 
 Map* create_map(const char * filepath) {
 	// * Read the map from "Assets/map_nthu.txt"
-
 	Map* M = (Map*)malloc(sizeof(Map));
 	FILE* pFile = NULL;
 	if (!M) {
@@ -69,21 +68,23 @@ Map* create_map(const char * filepath) {
 		// TODO-GC-read_txt: use fopen to open a file stream
 		// fopen reference: https://man7.org/linux/man-pages/man3/fopen.3.html
 		// use pFile and fscanf to read from file, just like read from standard input.
-		/*
+		
 		game_log("%s\n", filepath);
-		pFile = fopen(...);
+		pFile = fopen(filepath, "r");
 		if (!pFile) {
+			game_log("!pFile");
 			game_abort("error to open map file\n");
 			return NULL;
 		}
-		if(fscanf(...) != 2) {
+		if(fscanf(pFile,"%s") != 2) {
 			game_abort("Map format unmatched\n");
 			return NULL;
 		}
-		while(getc(pFile) != '\n'){};
-		*/
+		while(getc(pFile) != '\n'){
+			game_log("here?");
+		}
 	}
-
+	game_log("successfully log the path into pFile");
 	/*
 		Allocate a 2-Dimension dynamic char array for recording Map at M->map 
 	*/
@@ -99,7 +100,7 @@ Map* create_map(const char * filepath) {
 			return NULL;
 		}
 	}
-
+	game_log("successfully allocate the map");
 	M->wallnum = M->beansCount = 0; // * Record the number of beans and walls, which can be used to print score or other usage.
 	for (int i = 0; i < M->row_num; i++) {
 		for (int j = 0; j < M->col_num; j++) {
@@ -111,9 +112,7 @@ Map* create_map(const char * filepath) {
 				// '.' -> beans
 				// 'B' -> room of ghost
 				// 'P' -> Power Bean 
-				/*
-				fscanf(...);
-				*/
+				fscanf(pFile,"%c",M->map[i][j]);
 			switch(M->map[i][j]) {
 			case '#':
 				M->wallnum++;
@@ -136,13 +135,15 @@ void delete_map(Map* M) {
 	if (!M)
 		return;
 	// TODO-GC-memory: free the dynamic allocated part of Map* M at here;
-	/*
+	
 	if(M->map)
 	{
-		...
-		free(...)
-		...
-	*/
+		for (int i = 0; i < M->row_num; i++) {
+			for (int j = 0; j < M->col_num; j++) {
+				free(M->map[i][j]);
+			}
+		}
+	}
 	free(M);
 }
 
