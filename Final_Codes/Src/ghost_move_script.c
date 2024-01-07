@@ -116,7 +116,6 @@ static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M) {
 
 static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pacman) {
 	Directions shortestDirection = shortest_path_direc(M, ghost->objData.Coord.x, ghost->objData.Coord.y, pacman->objData.Coord.x, pacman->objData.Coord.y);
-	//wait for testing
 	//ghost is not running away from pacman, maybe
 	// TODO-PB: escape from pacman
 	// Description:
