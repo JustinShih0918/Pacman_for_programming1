@@ -32,7 +32,7 @@ static Map* basic_map;
 static Ghost** ghosts;
 bool debug_mode = false;
 bool cheat_mode = false;
-
+static score = 0;
 /* Declare static function prototypes */
 static void init(void);
 static void step(void);
@@ -111,6 +111,7 @@ static void checkItem(void) {
 	{
 	case '.':
 		pacman_eatItem(pman,'.');
+		score++;
 		break;
 	case 'P':
 		// Finish
@@ -187,6 +188,7 @@ static void status_update(void) {
 			if(!cheat_mode && RecAreaOverlap(&pmanRec, &ghostRec))
 			{
 				ghost_collided(ghosts[i]);
+				score+=20;
 			}
 			
 		}
@@ -229,8 +231,9 @@ static void draw(void) {
 
 	
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
-	// wait for testing
-	//al_draw_text(font_pirulen_24,al_map_rgb(255,255,255),0,0,0,"Testing");
+	// Finish
+	font_pirulen_32 = load_font("Assets/OpenSans-Regular.ttf",30);
+	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",score);
 	
 
 	draw_map(basic_map);
