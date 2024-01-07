@@ -196,6 +196,7 @@ static void status_update(void) {
 static void update(void) {
 
 	if (game_over) {
+		// Finish
 		// TODO-GC-game_over: start pman->death_anim_counter and schedule a game-over event (e.g change scene to menu) after Pacman's death animation finished
 		// hint: refer al_get_timer_started(...), al_get_timer_count(...), al_stop_timer(...), al_rest(...)
 		/*
@@ -204,15 +205,13 @@ static void update(void) {
 			// stop the timer if counter reach desired time.
 			game_change_scene(...);
 		*/
-		// wait for testing
-		// not working
 		if(!al_get_timer_started(pman->death_anim_counter))
 			al_start_timer(pman->death_anim_counter);
-
-		if(al_get_timer_count(pman->death_anim_counter)==80)
+		if(al_get_timer_count(pman->death_anim_counter)==20){
 			al_stop_timer(pman->death_anim_counter);
-		al_rest(1.0);
-		game_change_scene(scene_menu_create());
+			game_change_scene(scene_menu_create());
+		}
+		
 		return;
 	}
 
@@ -231,7 +230,7 @@ static void draw(void) {
 	
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
 	// wait for testing
-		//al_draw_text(font_pirulen_24,al_map_rgb(255,255,255),0,0,0,"Testing");
+	//al_draw_text(font_pirulen_24,al_map_rgb(255,255,255),0,0,0,"Testing");
 	
 
 	draw_map(basic_map);
