@@ -140,15 +140,34 @@ static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pa
 			break;
 	}
 
+	Directions counter_pman = RIGHT;
+	switch (shortestDirection)
+	{
+		case RIGHT:
+			counter_pman = LEFT;
+			break;
+		case LEFT:
+			counter_pman = RIGHT;
+			break;
+		case UP:
+			counter_pman = DOWN;
+			break;
+		case DOWN:
+			counter_pman = UP;
+			break;
+	}
+
 	static Directions proba[4]; // possible movement
 	int cnt = 0;
-	for (Directions i = 1; i <= 4; i++)
-		if (i != counter_one && ghost_movable(ghost,M,i,true) && i!= shortest_path_direc) 	proba[cnt++] = i;
+	for (Directions i = 1; i <= 4; i++){
+		if (i!=counter_one && ghost_movable(ghost,M,i,true) && i!= shortestDirection) proba[cnt++] = i;
+		else if(i == counter_one && i == counter_pman) proba[cnt++] = i;
+	}
 	if (cnt >= 1) {
 		ghost_NextMove(ghost, proba[generateRandomNumber(0,cnt-1)]);
 	}
 	else { // for the dead end case
-		ghost_NextMove(ghost, NONE);
+		ghost_NextMove(ghost, shortestDirection);
 	}
 	ghost->objData.preMove = ghost->objData.nextTryMove;
 }
