@@ -209,11 +209,12 @@ void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {
 		ghost->objData.facing = ghost->objData.preMove;
 		ghost->objData.moveCD = GAME_TICK_CD;
 }
-
+static int mode_change = 0;
 void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 	// TODO-GC-movement: do a little modification on shortest path move script
 	// Since always shortest path strategy is too strong, player have no chance to win this.
 	// hint: Do shortest path sometime and do random move sometime.
+	// Finish
 	if (!movetime(ghost->speed))
 		return;
 		switch (ghost->status)
@@ -224,10 +225,12 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 				ghost->status = GO_OUT;
 			break;
 		case FREEDOM:
-		//wait for testing
-		//not sure if this is strong enough
-			ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
-			ghost_move_script_FREEDOM_random(ghost,M);
+			mode_change++;
+			if(mode_change <= 16)
+				ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
+			else if(mode_change>16 && mode_change <= 32)
+				ghost_move_script_FREEDOM_random(ghost,M);
+			else mode_change = 0;
 			break;
 		case GO_OUT:
 			ghost_move_script_GO_OUT(ghost, M);
