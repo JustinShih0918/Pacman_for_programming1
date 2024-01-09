@@ -177,7 +177,7 @@ void pacman_draw(Pacman* pman) {
 			count += 16;
 			preSec = al_get_timer_count(pman->death_anim_counter);
 		}
-		game_log("timer:%d count:%d",al_get_timer_count(pman->death_anim_counter),count);
+		//game_log("timer:%d count:%d",al_get_timer_count(pman->death_anim_counter),count);
 		al_draw_scaled_bitmap(pman->die_sprite,  0+ count, 0,
 			16, 16,
 			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
