@@ -208,12 +208,12 @@ static void update(void) {
 		*/
 		if(!al_get_timer_started(pman->death_anim_counter))
 			al_start_timer(pman->death_anim_counter);
-		if(al_get_timer_count(pman->death_anim_counter)==20){
-			al_stop_timer(pman->death_anim_counter);
+		if(al_get_timer_count(pman->death_anim_counter)==18){
 			al_set_timer_count(pman->death_anim_counter,0);
-			count = 0;
-			preSec = 0;
+			al_stop_timer(pman->death_anim_counter);
+			game_log("%d",al_get_timer_count(pman->death_anim_counter));
 			score = 0;
+			game_over = false;
 			game_change_scene(scene_menu_create());
 		}
 		

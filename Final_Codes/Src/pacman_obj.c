@@ -24,6 +24,8 @@ extern uint32_t GAME_TICK_CD;
 extern bool game_over;
 extern float effect_volume;
 
+static int count = 0;
+static int preSec = 0;
 /* Declare static function */
 static bool pacman_movable(const Pacman* pacman, const Map* M, Directions targetDirec) {
 	// TODO-HACKATHON 1-2: Determine if the current direction is movable.
@@ -171,8 +173,6 @@ void pacman_draw(Pacman* pman) {
 		// TODO-GC-animation: Draw die animation(pman->die_sprite)
 		// hint: instead of using pman->objData.moveCD, use pman->death_anim_counter to create animation.
 		// refer al_get_timer_count and al_draw_scaled_bitmap. Suggestion frame rate: 8fps.
-		static int count = 0;
-		static int preSec = 0;
 		if(al_get_timer_count(pman->death_anim_counter) != 0 && al_get_timer_count(pman->death_anim_counter)-preSec == 1){
 			count += 16;
 			preSec = al_get_timer_count(pman->death_anim_counter);
@@ -183,6 +183,10 @@ void pacman_draw(Pacman* pman) {
 			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 			draw_region, draw_region, 0
 		);
+		if(preSec>=18){
+			preSec = 0;
+			count = 0;
+		}
 	}
 }
 void pacman_move(Pacman* pacman, Map* M) {

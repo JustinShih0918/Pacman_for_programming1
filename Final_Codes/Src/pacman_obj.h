@@ -15,7 +15,6 @@
 
 typedef struct Ghost Ghost;
 typedef struct Map Map;
-
 typedef struct Pacman{
 	object objData;
 	bitmapdata imgdata;
