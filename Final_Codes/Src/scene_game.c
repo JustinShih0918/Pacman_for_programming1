@@ -32,7 +32,7 @@ static Map* basic_map;
 static Ghost** ghosts;
 bool debug_mode = false;
 bool cheat_mode = false;
-static score = 0;
+static int score = 0;
 /* Declare static function prototypes */
 static void init(void);
 static void step(void);
@@ -75,7 +75,6 @@ static void init(void) {
 		// TODO-HACKATHON 2-2: create a ghost.
 		// Try to look the definition of ghost_create in ghost.h and figure out what should be placed here.
 		for (int i = 0; i < GHOST_NUM; i++) {
-			
 			game_log("creating ghost %d\n", i);
 			ghosts[i] = ghost_create(i);  
 			if (!ghosts[i])
@@ -211,6 +210,10 @@ static void update(void) {
 			al_start_timer(pman->death_anim_counter);
 		if(al_get_timer_count(pman->death_anim_counter)==20){
 			al_stop_timer(pman->death_anim_counter);
+			al_set_timer_count(pman->death_anim_counter,0);
+			count = 0;
+			preSec = 0;
+			score = 0;
 			game_change_scene(scene_menu_create());
 		}
 		
@@ -232,7 +235,8 @@ static void draw(void) {
 	
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
 	// Finish
-	font_pirulen_32 = load_font("Assets/OpenSans-Regular.ttf",30);
+	
+	font_pirulen_32 = al_load_font("Assets/OpenSans-Regular.ttf", 30, 0);
 	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",score);
 	
 
