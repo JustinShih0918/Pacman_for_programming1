@@ -2,16 +2,42 @@
 // No need to do anything for this part. We've already done it for
 // you, so this 2 files is like the default scene template.
 #include "scene_settings.h"
-
+#include "utility.h"
+#include <allegro5/allegro_primitives.h>
 // Variables and functions with 'static' prefix at the top level of a
 // source file is only accessible in that file ("file scope", also
 // known as "internal linkage"). If other files has the same variable
 // name, they'll be different variables.
 
 /* Define your static vars / function prototypes below. */
-
+static RecArea checkbox;
+static bool checkbox_hovered;
+static bool checkbox_click;
+static ALLEGRO_SAMPLE_ID settingBGM;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
+
+static void init(){
+	changeMusic = false;
+	checkbox_hovered = false;
+	checkbox_click = false;
+	checkbox.x = 100;
+	checkbox.y = 100;
+	checkbox.w = 80;
+	checkbox.h = 80;
+
+	stop_bgm(settingBGM);
+}
+
+static bool checkboxHover(RecArea rec, int mouse_x, int mouse_y) {
+	// TODO-HACKATHON 3-6: Check if mouse is hovering on the button
+	//	Uncomment and fill the code below
+	
+	return pnt_in_rect(mouse_x,mouse_y,rec);
+	
+	return false;
+}
+
 
 static void draw(void ){
 	al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -23,6 +49,34 @@ static void draw(void ){
 		ALLEGRO_ALIGN_CENTER,
 		"<ENTER> Back to menu"
 	);
+	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,115,0,"Change Music !");
+	if(checkbox_click){
+		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
+		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
+	}
+	else if(checkbox_hovered){
+		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
+		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
+	}
+	else if(!checkbox_click&&!checkbox_hovered)
+		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
+
+	if(checkbox_hovered){
+		stop_bgm(settingBGM);
+		settingBGM = play_audio(HOVER_SOUND,effect_volume);
+	}
+	
+}
+
+static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
+	checkbox_hovered = checkboxHover(checkbox,mouse_x,mouse_y);
+}
+
+static void on_mouse_down() {
+	if (checkbox_hovered){
+		checkbox_click = !checkbox_click;
+		changeMusic = !changeMusic;
+	}
 }
 
 static void on_key_down(int keycode) {
@@ -39,9 +93,12 @@ static void on_key_down(int keycode) {
 Scene scene_settings_create(void) {
 	Scene scene;
 	memset(&scene, 0, sizeof(Scene));
+	scene.initialize = &init;
 	scene.name = "Settings";
 	scene.draw = &draw;
 	scene.on_key_down = &on_key_down;
+	scene.on_mouse_move = &on_mouse_move;
+	scene.on_mouse_down = &on_mouse_down;
 	// TODO-IF: Register more event callback functions such as keyboard, mouse, ...
 	game_log("Settings scene created");
 	return scene;

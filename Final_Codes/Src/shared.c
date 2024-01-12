@@ -15,6 +15,7 @@ ALLEGRO_SAMPLE* PACMAN_DEATH_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_EAT_GHOST_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_EAT_POWERBEAN_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_VICTORY_SOUND = NULL;
+ALLEGRO_SAMPLE* HOVER_SOUND = NULL;
 int fontSize = 30;
 float music_volume = 0.5;
 float effect_volume = 0.5;
@@ -36,6 +37,7 @@ void shared_init(void) {
 	PACMAN_EAT_GHOST_SOUND = load_audio("Assets/Music/pacman_eatghost.ogg");
 	PACMAN_EAT_POWERBEAN_SOUND = load_audio("Assets/Music/pacman_eatfruit.ogg");
 	PACMAN_VICTORY_SOUND = load_audio("Assets/Music/pacman_victory.ogg");
+	HOVER_SOUND = load_audio("Assets/Music/hover_sound.ogg");
 }
 
 void shared_destroy(void) {
@@ -48,4 +50,5 @@ void shared_destroy(void) {
 	al_destroy_sample(PACMAN_EAT_GHOST_SOUND);
 	al_destroy_sample(PACMAN_EAT_POWERBEAN_SOUND);
 	al_destroy_sample(PACMAN_VICTORY_SOUND);
+	al_destroy_sample(HOVER_SOUND);
 }
