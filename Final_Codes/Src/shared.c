@@ -34,7 +34,7 @@ void shared_init(void) {
 	PACMAN_DEATH_SOUND = load_audio("Assets/Music/pacman_death.ogg");
 	PACMAN_EAT_GHOST_SOUND = load_audio("Assets/Music/pacman_eatghost.ogg");
 	PACMAN_EAT_POWERBEAN_SOUND = load_audio("Assets/Music/pacman_eatfruit.ogg");
-	PACMAN_VICTORY_SOUND = load_audio("Assets/Music/pacman_intermission.ogg");
+	PACMAN_VICTORY_SOUND = load_audio("Assets/Music/pacman_victory.ogg");
 }
 
 void shared_destroy(void) {

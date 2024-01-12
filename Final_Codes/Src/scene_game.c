@@ -49,6 +49,7 @@ static void draw_hitboxes(void);
 static void init(void) {
 	game_over = false;
 	game_main_Score = 0;
+	bean_ate_amount = 0;
 	// create map
 	//basic_map = create_map(NULL);
 	// Finish
@@ -215,8 +216,9 @@ static void update(void) {
 			al_start_timer(pman->death_anim_counter);
 			al_set_timer_count(pman->death_anim_counter,0);
 		}
-		if(al_get_timer_count(pman->death_anim_counter)==18){
+		if(al_get_timer_count(pman->death_anim_counter)==16){
 			al_stop_timer(pman->death_anim_counter);
+			al_rest(2);
 			game_change_scene(scene_menu_create());
 		}
 		

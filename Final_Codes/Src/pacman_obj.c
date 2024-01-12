@@ -183,7 +183,7 @@ void pacman_draw(Pacman* pman) {
 			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 			draw_region, draw_region, 0
 		);
-		if(preSec>=17){
+		if(preSec>=16){
 			preSec = 0;
 			count = 0;
 		}
