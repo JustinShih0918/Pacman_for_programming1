@@ -241,9 +241,8 @@ static void draw(void) {
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
 	// Finish
 	
-	
-	al_draw_textf(menuFont,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",game_main_Score);
-	al_draw_textf(menuFont,al_map_rgb(255,255,0),300,10,ALLEGRO_ALIGN_LEFT,"%s: %d","bean_eaten",bean_ate_amount);
+	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",game_main_Score);
+	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),300,10,ALLEGRO_ALIGN_LEFT,"%s: %d","bean_eaten",bean_ate_amount);
 
 	draw_map(basic_map);
 
