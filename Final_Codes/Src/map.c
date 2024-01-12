@@ -11,7 +11,7 @@
 const int block_width = 21,  block_height = 21;			// the pixel size of a "block"
 const int map_offset_x = 25, map_offset_y = 50;			// pixel offset of where to start draw map
 const int four_probe[4][2] = {{ 1, 0 }, { 0, 1 }, { -1,0 }, { 0, -1 }};
-
+static int bean_count = 0;
 /* Declare static function prototypes. */
 static void draw_block_index(const Map* M, int row, int col);
 static void draw_bean(const Map* M, const int row, const int col);
@@ -127,7 +127,7 @@ Map* create_map(const char * filepath) {
 				*/
 				fscanf(pFile,"%c",&M->map[i][j]);
 			}
-				
+			
 			
 			switch(M->map[i][j]) {
 			case '#':
@@ -135,6 +135,7 @@ Map* create_map(const char * filepath) {
 				break;
 			case '.':
 				M->beansCount++;
+				
 				break;
 			default:
 				break;

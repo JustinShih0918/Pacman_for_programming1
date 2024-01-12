@@ -11,7 +11,6 @@
 #include "ghost.h"
 #include "map.h"
 
-
 // TODO-HACKATHON 2-0: Create one ghost
 // Just modify the GHOST_NUM to 1
 #define GHOST_NUM 4
@@ -22,6 +21,7 @@ extern const uint32_t GAME_TICK_CD;
 extern uint32_t GAME_TICK;
 extern ALLEGRO_TIMER* game_tick_timer;
 int game_main_Score = 0;
+int bean_ate_amount = 0;
 bool game_over = false;
 
 /* Internal variables*/
@@ -32,7 +32,6 @@ static Map* basic_map;
 static Ghost** ghosts;
 bool debug_mode = false;
 bool cheat_mode = false;
-static int score = 0;
 /* Declare static function prototypes */
 static void init(void);
 static void step(void);
@@ -110,7 +109,8 @@ static void checkItem(void) {
 	{
 	case '.':
 		pacman_eatItem(pman,'.');
-		score++;
+		game_main_Score++;
+		bean_ate_amount++;
 		break;
 	case 'P':
 		// Finish
@@ -133,7 +133,11 @@ static void checkItem(void) {
 }
 static void status_update(void) {
 	// TODO-PB: check powerUp duration
-	
+	if(bean_ate_amount == basic_map->beansNum){
+		game_log("Game_complete!");
+		pacman_victory();
+		game_over = true;
+	}
 	if (pman->powerUp)
 	{
 		// Check the value of power_up_timer
@@ -186,8 +190,9 @@ static void status_update(void) {
 			// Finish
 			if(!cheat_mode && RecAreaOverlap(&pmanRec, &ghostRec))
 			{
+				pacman_eatGhost();
 				ghost_collided(ghosts[i]);
-				score+=20;
+				game_main_Score+=20;
 			}
 			
 		}
@@ -206,14 +211,12 @@ static void update(void) {
 			// stop the timer if counter reach desired time.
 			game_change_scene(...);
 		*/
-		if(!al_get_timer_started(pman->death_anim_counter))
+		if(!al_get_timer_started(pman->death_anim_counter)){
 			al_start_timer(pman->death_anim_counter);
-		if(al_get_timer_count(pman->death_anim_counter)==18){
 			al_set_timer_count(pman->death_anim_counter,0);
+		}
+		if(al_get_timer_count(pman->death_anim_counter)==18){
 			al_stop_timer(pman->death_anim_counter);
-			game_log("%d",al_get_timer_count(pman->death_anim_counter));
-			score = 0;
-			game_over = false;
 			game_change_scene(scene_menu_create());
 		}
 		
@@ -236,9 +239,9 @@ static void draw(void) {
 	// TODO-GC-scoring: Draw scoreboard, something your may need is sprinf();
 	// Finish
 	
-	font_pirulen_32 = al_load_font("Assets/OpenSans-Regular.ttf", 30, 0);
-	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",score);
 	
+	al_draw_textf(menuFont,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",game_main_Score);
+	al_draw_textf(menuFont,al_map_rgb(255,255,0),300,10,ALLEGRO_ALIGN_LEFT,"%s: %d","bean_eaten",bean_ate_amount);
 
 	draw_map(basic_map);
 

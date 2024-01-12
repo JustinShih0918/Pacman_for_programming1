@@ -183,7 +183,7 @@ void pacman_draw(Pacman* pman) {
 			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 			draw_region, draw_region, 0
 		);
-		if(preSec>=18){
+		if(preSec>=17){
 			preSec = 0;
 			count = 0;
 		}
@@ -235,6 +235,8 @@ void pacman_eatItem(Pacman* pacman, const char Item) {
 	// Finish
 	// TODO-GC-PB: set pacman powerUp mode
 	case 'P':
+		stop_bgm(PACMAN_MOVESOUND_ID);
+		PACMAN_MOVESOUND_ID = play_audio(PACMAN_EAT_POWERBEAN_SOUND, effect_volume);
 		pacman->powerUp = true;
 		break;
 	default:
@@ -252,3 +254,14 @@ void pacman_die() {
 	stop_bgm(PACMAN_MOVESOUND_ID);
 	PACMAN_MOVESOUND_ID = play_audio(PACMAN_DEATH_SOUND, effect_volume);
 }
+
+void pacman_eatGhost() {
+	stop_bgm(PACMAN_MOVESOUND_ID);
+	PACMAN_MOVESOUND_ID = play_audio(PACMAN_EAT_GHOST_SOUND, effect_volume);
+}
+
+void pacman_victory() {
+	stop_bgm(PACMAN_MOVESOUND_ID);
+	PACMAN_MOVESOUND_ID = play_audio(PACMAN_VICTORY_SOUND, effect_volume);
+}
+

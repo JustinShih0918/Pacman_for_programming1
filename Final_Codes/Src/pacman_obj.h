@@ -34,5 +34,7 @@ void pacman_eatItem(Pacman* pacman, const char Item);
 
 void pacman_NextMove(Pacman* pacman, Directions next);
 void pacman_die();
+void pacman_eatGhost();
+void pacman_victory();
 
 #endif // !PACMAN_OBJ_H

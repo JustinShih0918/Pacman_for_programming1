@@ -39,7 +39,7 @@ static void init() {
 	gameTitleH = al_get_bitmap_height(gameTitle);
 	stop_bgm(menuBGM);
 	menuBGM = play_bgm(themeMusic, music_volume);
-
+	
 }
 
 
