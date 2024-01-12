@@ -10,43 +10,103 @@
 // name, they'll be different variables.
 
 /* Define your static vars / function prototypes below. */
+static ALLEGRO_BITMAP* dropbox_icon;
 static Checkbox checkbox_1;
-static Checkbox checkbox_2;
-static ALLEGRO_SAMPLE_ID settingBGM;
+static Checkbox checkbox_dropbox_icon;
+static Checkbox dropbox_1;
+static Checkbox dropbox_2;
+static Checkbox dropbox_3;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
-static void init(){
-
-	checkbox_1.hovered = false;
-	checkbox_1.clicked = false;
-	checkbox_1.rec.x = 100;
-	checkbox_1.rec.y = 100;
-	checkbox_1.rec.w = 80;
-	checkbox_1.rec.h = 80;
-
-	stop_bgm(settingBGM);
+Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b){
+	Checkbox checkbox;
+	checkbox.rec.x = x;
+	checkbox.rec.y = y;
+	checkbox.rec.w = w;
+	checkbox.rec.h = h;
+	checkbox.x2 = x+w;
+	checkbox.y2 = y+h;
+	checkbox.hovered = a;
+	checkbox.clicked = b;
+	return checkbox;
 }
+
+static void init(){
+	dropbox_icon = load_bitmap("Assets/music_icon.jpg");
+	checkbox_1 = createCheckbox(100,100,80,80,false,false);
+	checkbox_dropbox_icon = createCheckbox(100,200,80,80,false,false);
+	dropbox_1 = createCheckbox(200,300,300,50,false,false);
+	dropbox_2 = createCheckbox(200,360,300,50,false,false);
+	dropbox_3 = createCheckbox(200,420,300,50,false,false);
+}
+
+static void draw_dropboxs(){
+	if(dropbox_2.hovered||dropbox_3.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(255, 255, 255));
+	else if(dropbox_1.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(135, 206, 235));
+	else if(dropbox_2.clicked||dropbox_3.clicked)
+		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(255, 255, 255));
+	else
+		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(135, 206, 235));
+	
+	if(dropbox_1.hovered||dropbox_3.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(255, 255, 255));
+	else if(dropbox_2.clicked)
+		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(135, 206, 235));
+	else if(dropbox_2.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(135, 206, 235));
+	else
+		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(255, 255, 255));
+
+	if(dropbox_2.hovered||dropbox_1.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(255, 255, 255));
+	else if(dropbox_3.clicked)
+		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(135, 206, 235));
+	else if(dropbox_3.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(135, 206, 235));
+	else
+		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(255, 255, 255));
+	
+	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_1.rec.x+dropbox_1.x2)/2,(dropbox_1.rec.y+dropbox_1.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Pacman");
+	al_draw_text(font_pirulen_24,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-19,ALLEGRO_ALIGN_CENTRE,"The Greatest Showman");
+	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_3.rec.x+dropbox_3.x2)/2,(dropbox_3.rec.y+dropbox_3.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"La La Land");
+}
+
+static void draw_dropbox_icon(){
+	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Change Music2 !");
+	
+	if(checkbox_dropbox_icon.clicked){
+		al_draw_scaled_bitmap(dropbox_icon,222,14,80,80,checkbox_dropbox_icon.rec.x,checkbox_dropbox_icon.rec.y,80,80,0);
+		draw_dropboxs();
+		al_draw_scaled_bitmap(dropbox_icon,222,14,80,80,checkbox_dropbox_icon.rec.x,checkbox_dropbox_icon.rec.y,80,80,0);
+	}
+	else if(checkbox_dropbox_icon.hovered){
+		al_draw_scaled_bitmap(dropbox_icon,222,14,80,80,checkbox_dropbox_icon.rec.x,checkbox_dropbox_icon.rec.y,80,80,0);
+	}
+	else if(!checkbox_dropbox_icon.clicked&&!checkbox_dropbox_icon.hovered){
+		al_draw_scaled_bitmap(dropbox_icon,143,14,80,80,checkbox_dropbox_icon.rec.x,checkbox_dropbox_icon.rec.y,80,80,0);
+	}
+}
+
 
 static void draw_checkbox_1(){
 	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,115,0,"Change Music !");
 
 	if(checkbox_1.clicked){
-		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
 		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
 	}
 	else if(checkbox_1.hovered){
-		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
 		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
 	}
-	else if(!checkbox_1.clicked&&!checkbox_1.hovered)
-		al_draw_filled_rounded_rectangle(100,100,180,180,5,5,al_map_rgb(200,200,0));
-
-	if(checkbox_1.hovered){
-		stop_bgm(settingBGM);
-		settingBGM = play_audio(HOVER_SOUND,effect_volume);
+	else if(!checkbox_1.clicked&&!checkbox_1.hovered){
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
 	}
 }
+
 
 static void draw(void ){
 	al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -59,6 +119,7 @@ static void draw(void ){
 		"<ENTER> Back to menu"
 	);
 	draw_checkbox_1();
+	draw_dropbox_icon();
 }
 
 static bool checkboxHover(RecArea rec, int mouse_x, int mouse_y) {
@@ -72,11 +133,30 @@ static bool checkboxHover(RecArea rec, int mouse_x, int mouse_y) {
 
 static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
 	checkbox_1.hovered = checkboxHover(checkbox_1.rec,mouse_x,mouse_y);
+	checkbox_dropbox_icon.hovered = checkboxHover(checkbox_dropbox_icon.rec,mouse_x,mouse_y);
+	dropbox_1.hovered = checkboxHover(dropbox_1.rec,mouse_x,mouse_y);
+	dropbox_2.hovered = checkboxHover(dropbox_2.rec,mouse_x,mouse_y);
+	dropbox_3.hovered = checkboxHover(dropbox_3.rec,mouse_x,mouse_y);
 }
 
 static void on_mouse_down() {
-	if (checkbox_1.hovered){
-		checkbox_1.clicked = !checkbox_1.clicked;
+	if (checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
+	if(checkbox_dropbox_icon.hovered) checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
+	
+	if(dropbox_1.hovered){
+		dropbox_1.clicked = true; 
+		dropbox_2.clicked = false;
+		dropbox_3.clicked = false;
+	}
+	else if(dropbox_2.hovered){
+		dropbox_1.clicked = false;
+		dropbox_2.clicked = true;
+		dropbox_3.clicked = false;
+	}
+	else if(dropbox_3.hovered){
+		dropbox_1.clicked = false;
+		dropbox_2.clicked = false;
+		dropbox_3.clicked = true;
 	}
 }
 
@@ -90,6 +170,10 @@ static void on_key_down(int keycode) {
 	}
 }
 
+static void destroy_setting(){
+	al_destroy_bitmap(dropbox_icon);
+}
+
 // The only function that is shared across files.
 Scene scene_settings_create(void) {
 	Scene scene;
@@ -100,6 +184,7 @@ Scene scene_settings_create(void) {
 	scene.on_key_down = &on_key_down;
 	scene.on_mouse_move = &on_mouse_move;
 	scene.on_mouse_down = &on_mouse_down;
+	scene.destroy = &destroy_setting;
 	// TODO-IF: Register more event callback functions such as keyboard, mouse, ...
 	game_log("Settings scene created");
 	return scene;

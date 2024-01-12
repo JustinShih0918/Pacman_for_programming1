@@ -7,10 +7,13 @@
 
 typedef struct Checkbox{
 	RecArea rec;
+	int x2;
+	int y2;
 	bool clicked;
 	bool hovered;
 }Checkbox;
 
+Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b);
 Scene scene_settings_create(void);
 
 #endif
