@@ -4,7 +4,13 @@
 #include "utility.h"
 #include "shared.h"
 #include "scene_menu.h"
-static bool changeMusic;
+
+typedef struct Checkbox{
+	RecArea rec;
+	bool clicked;
+	bool hovered;
+}Checkbox;
+
 Scene scene_settings_create(void);
 
 #endif
