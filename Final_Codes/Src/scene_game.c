@@ -216,7 +216,8 @@ static void update(void) {
 			al_start_timer(pman->death_anim_counter);
 			al_set_timer_count(pman->death_anim_counter,0);
 		}
-		if(al_get_timer_count(pman->death_anim_counter)==16){
+		if(al_get_timer_count(pman->death_anim_counter)>=15){
+			al_set_timer_count(pman->death_anim_counter,0);
 			al_stop_timer(pman->death_anim_counter);
 			al_rest(2);
 			game_change_scene(scene_menu_create());
