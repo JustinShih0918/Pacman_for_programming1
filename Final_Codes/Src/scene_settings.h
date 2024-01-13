@@ -18,6 +18,7 @@ static Checkbox dropbox_2;
 static Checkbox dropbox_3;
 
 Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b);
+int getDropbox();
 Scene scene_settings_create(void);
 
 #endif

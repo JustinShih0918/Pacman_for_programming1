@@ -13,6 +13,7 @@
 static ALLEGRO_BITMAP* dropbox_icon;
 static Checkbox checkbox_1;
 static Checkbox checkbox_dropbox_icon;
+static ALLEGRO_SAMPLE_ID settingBGM;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
@@ -29,13 +30,22 @@ Checkbox createCheckbox(int x,int y,int w,int h,bool hover,bool click){
 	return checkbox;
 }
 
+int getDropbox(){
+	if(checkbox_1.clicked) return 4;
+	else if(dropbox_1.clicked) return 1;
+	else if(dropbox_2.clicked) return 2;
+	else if(dropbox_3.clicked) return 3;
+	else return 1;
+}
+
 static void init(){
 	dropbox_icon = load_bitmap("Assets/music_icon.jpg");
-	checkbox_1 = createCheckbox(100,100,80,80,false,false);
+	checkbox_1 = createCheckbox(100,100,80,80,false,checkbox_1.clicked);
 	checkbox_dropbox_icon = createCheckbox(100,200,80,80,false,false);
 	dropbox_1 = createCheckbox(200,300,300,50,dropbox_1.hovered,dropbox_1.clicked);
 	dropbox_2 = createCheckbox(200,360,300,50,dropbox_2.hovered,dropbox_2.clicked);
 	dropbox_3 = createCheckbox(200,420,300,50,dropbox_3.hovered,dropbox_3.clicked);
+	stop_bgm(settingBGM);
 }
 
 static void draw_dropboxs(){
@@ -67,15 +77,15 @@ static void draw_dropboxs(){
 		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(255, 255, 255));
 	
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_1.rec.x+dropbox_1.x2)/2,(dropbox_1.rec.y+dropbox_1.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Pacman");
-	al_draw_text(font_pirulen_24,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-19,ALLEGRO_ALIGN_CENTRE,"The Greatest Showman");
-	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_3.rec.x+dropbox_3.x2)/2,(dropbox_3.rec.y+dropbox_3.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"La La Land");
+	al_draw_text(font_pirulen_24,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-19,ALLEGRO_ALIGN_CENTRE,"Mission Impossible");
+	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_3.rec.x+dropbox_3.x2)/2,(dropbox_3.rec.y+dropbox_3.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Interstellar");
 }
 
 static void draw_dropbox_icon(){
-	if(dropbox_2.clicked) 
-		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"The Greastest Showman");
+	if(dropbox_2.clicked)
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Mission Impossible");
 	else if(dropbox_3.clicked)
-		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"La La Land");
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Interstellar");
 	else
 		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Pacman");
 	
@@ -94,18 +104,18 @@ static void draw_dropbox_icon(){
 
 
 static void draw_checkbox_1(){
-	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,115,0,"Change Music !");
+	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,115,0,"Mute the Music !");
 
 	if(checkbox_1.clicked){
-		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
-		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(255,255,255));
+		al_draw_circle(140,140,30,al_map_rgb(0,0,0),5);
 	}
 	else if(checkbox_1.hovered){
-		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
-		al_draw_circle(140,140,30,al_map_rgb(255,255,255),5);
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(255,255,255));
+		al_draw_circle(140,140,30,al_map_rgb(0,0,0),5);
 	}
 	else if(!checkbox_1.clicked&&!checkbox_1.hovered){
-		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(200,200,0));
+		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(255,255,255));
 	}
 }
 
@@ -174,6 +184,7 @@ static void on_key_down(int keycode) {
 
 static void destroy_setting(){
 	al_destroy_bitmap(dropbox_icon);
+	stop_bgm(settingBGM);
 }
 
 // The only function that is shared across files.

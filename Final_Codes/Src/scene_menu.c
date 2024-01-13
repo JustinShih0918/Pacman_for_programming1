@@ -38,8 +38,19 @@ static void init() {
 	gameTitleW = al_get_bitmap_width(gameTitle);
 	gameTitleH = al_get_bitmap_height(gameTitle);
 	stop_bgm(menuBGM);
-	menuBGM = play_bgm(themeMusic, music_volume);
-	
+
+	switch (getDropbox())
+	{
+	case 1:
+		menuBGM = play_bgm(PACMAN_themeMusic, music_volume);
+		break;
+	case 2:
+		menuBGM = play_bgm(MissionImpossible_themeMusic,music_volume);
+		break;
+	case 3:
+		menuBGM = play_bgm(Intersteller_themeMusic, music_volume);
+		break;
+	}
 }
 
 

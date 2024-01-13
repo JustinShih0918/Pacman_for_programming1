@@ -10,6 +10,7 @@
 #include "pacman_obj.h"
 #include "ghost.h"
 #include "map.h"
+#include "scene_settings.h"
 
 // TODO-HACKATHON 2-0: Create one ghost
 // Just modify the GHOST_NUM to 1
@@ -25,6 +26,7 @@ int bean_ate_amount = 0;
 bool game_over = false;
 
 /* Internal variables*/
+static ALLEGRO_SAMPLE_ID Background_Music;
 static ALLEGRO_TIMER* power_up_timer;
 static const int power_up_duration = 10;
 static Pacman* pman;
@@ -88,7 +90,24 @@ static void init(void) {
 	power_up_timer = al_create_timer(1.0f); // 1 tick per second
 	if (!power_up_timer)
 		game_abort("Error on create timer\n");
-	return ;
+
+	stop_bgm(Background_Music);
+	switch (getDropbox())
+	{
+	case 1:
+		Background_Music = play_bgm(PACMAN_themeMusic, music_volume);
+		break;
+	case 2:
+		Background_Music = play_bgm(MissionImpossible_themeMusic,music_volume);
+		break;
+	case 3:
+		Background_Music = play_bgm(Intersteller_themeMusic, music_volume);
+		break;
+	case 4:
+		break;
+	}
+
+	return;
 }
 
 static void step(void) {
@@ -136,6 +155,7 @@ static void status_update(void) {
 	// TODO-PB: check powerUp duration
 	if(bean_ate_amount == basic_map->beansNum){
 		game_log("Game_complete!");
+		stop_bgm(Background_Music);
 		pacman_victory();
 		game_over = true;
 	}
@@ -178,6 +198,7 @@ static void status_update(void) {
 			if(!cheat_mode && RecAreaOverlap(&pmanRec, &ghostRec))
 			{
 				game_log("collide with ghost\n");
+				stop_bgm(Background_Music);
 				al_rest(1.0);
 				pacman_die();
 				game_over = true;
@@ -297,6 +318,7 @@ static void destroy(void) {
 		ghost_destroy(ghosts[i]);
 	}
 	delete_map(basic_map);
+	stop_bgm(Background_Music);
 }
 
 static void on_key_down(int key_code) {
