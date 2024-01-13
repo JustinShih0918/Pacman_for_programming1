@@ -332,6 +332,15 @@ static void destroy(void) {
 }
 
 static void on_key_down(int key_code) {
+	if(key_code == controlUp)
+		pacman_NextMove(pman,UP);
+	else if(key_code == controlDown)
+		pacman_NextMove(pman,DOWN);
+	else if(key_code == controlLeft)
+		pacman_NextMove(pman,LEFT);
+	else if(key_code == controlRight)
+		pacman_NextMove(pman,RIGHT);
+		
 	switch (key_code)
 	{
 		// TODO-HACKATHON 1-1: Use allegro pre-defined enum ALLEGRO_KEY_<KEYNAME> to controll pacman movement
@@ -444,4 +453,11 @@ bool get_ghost_stop(){
 
 bool get_pacman_smash(){
 	return pacman_smash;
+}
+
+void set_control_key(int up,int down,int left,int right){
+	controlUp = up;
+	controlDown = down;
+	controlLeft = left;
+	controlRight = right;
 }

@@ -3,6 +3,7 @@
 // you, so this 2 files is like the default scene template.
 #include "scene_settings.h"
 #include "utility.h"
+#include "scene_game.h"
 #include <allegro5/allegro_primitives.h>
 // Variables and functions with 'static' prefix at the top level of a
 // source file is only accessible in that file ("file scope", also
@@ -14,6 +15,11 @@ static ALLEGRO_BITMAP* dropbox_icon;
 static Checkbox checkbox_1;
 static Checkbox checkbox_dropbox_icon;
 static Checkbox checkbox_key;
+static Checkbox window;
+static Checkbox button_up;
+static Checkbox button_down;
+static Checkbox button_right;
+static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
@@ -40,13 +46,21 @@ int getDropbox(){
 }
 
 static void init(){
-	dropbox_icon = load_bitmap("Assets/music_icon.jpg");
 	checkbox_1 = createCheckbox(100,150,80,80,false,checkbox_1.clicked);
+
+	dropbox_icon = load_bitmap("Assets/music_icon.jpg");
 	checkbox_dropbox_icon = createCheckbox(100,250,80,80,false,false);
 	dropbox_1 = createCheckbox(200,350,300,50,dropbox_1.hovered,dropbox_1.clicked);
 	dropbox_2 = createCheckbox(200,410,300,50,dropbox_2.hovered,dropbox_2.clicked);
 	dropbox_3 = createCheckbox(200,470,300,50,dropbox_3.hovered,dropbox_3.clicked);
+
 	checkbox_key = createCheckbox(100,80,600,50,false,false);
+	window = createCheckbox(100,120,600,600,false,false);
+	button_up = createCheckbox(350,300,100,100,false,false);
+	button_down = createCheckbox(350,410,100,100,false,false);
+	button_left = createCheckbox(240,410,100,100,false,false);
+	button_right = createCheckbox(460,410,100,100,false,false);
+
 	stop_bgm(settingBGM);
 }
 
@@ -121,9 +135,44 @@ static void draw_checkbox_1(){
 	}
 }
 
+static void draw_window(){
+	al_draw_filled_rounded_rectangle(window.rec.x,window.rec.y,window.x2,window.y2,5,5,al_map_rgb(128,128,128));
+
+	if(button_up.clicked){
+		al_draw_filled_rounded_rectangle(button_up.rec.x,button_up.rec.y,button_up.x2,button_up.y2,5,5,al_map_rgb(255,255,0));
+	}
+	else{
+		al_draw_filled_rounded_rectangle(button_up.rec.x,button_up.rec.y,button_up.x2,button_up.y2,5,5,al_map_rgb(255,255,255));
+		
+	}
+		
+	
+	if(button_down.clicked){
+		al_draw_filled_rounded_rectangle(button_down.rec.x,button_down.rec.y,button_down.x2,button_down.y2,5,5,al_map_rgb(255,255,0));
+	}
+	else{
+		al_draw_filled_rounded_rectangle(button_down.rec.x,button_down.rec.y,button_down.x2,button_down.y2,5,5,al_map_rgb(255,255,255));
+	}
+
+	if(button_left.clicked){
+		al_draw_filled_rounded_rectangle(button_left.rec.x,button_left.rec.y,button_left.x2,button_left.y2,5,5,al_map_rgb(255,255,0));
+	}
+	else{
+		al_draw_filled_rounded_rectangle(button_left.rec.x,button_left.rec.y,button_left.x2,button_left.y2,5,5,al_map_rgb(255,255,255));
+	}
+
+	if(button_right.clicked){
+		al_draw_filled_rounded_rectangle(button_right.rec.x,button_right.rec.y,button_right.x2,button_right.y2,5,5,al_map_rgb(255,255,0));
+	}
+	else{
+		al_draw_filled_rounded_rectangle(button_right.rec.x,button_right.rec.y,button_right.x2,button_right.y2,5,5,al_map_rgb(255,255,255));
+	}
+}
+
 static void draw_checkbox_key(){
 	if(checkbox_key.clicked){
 		al_draw_filled_rounded_rectangle(checkbox_key.rec.x,checkbox_key.rec.y,checkbox_key.x2,checkbox_key.y2,5,5,al_map_rgb(128,128,128));
+		draw_window();
 	}else if(checkbox_key.hovered){
 		al_draw_filled_rounded_rectangle(checkbox_key.rec.x,checkbox_key.rec.y,checkbox_key.x2,checkbox_key.y2,5,5,al_map_rgb(128,128,128));
 	}
@@ -131,7 +180,6 @@ static void draw_checkbox_key(){
 		al_draw_filled_rounded_rectangle(checkbox_key.rec.x,checkbox_key.rec.y,checkbox_key.x2,checkbox_key.y2,5,5,al_map_rgb(255,255,255));
 	}
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),400,80,ALLEGRO_ALIGN_CENTRE,"Change Control Key");
-
 }
 
 
@@ -160,18 +208,30 @@ static bool checkboxHover(RecArea rec, int mouse_x, int mouse_y) {
 }
 
 static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
-	checkbox_1.hovered = checkboxHover(checkbox_1.rec,mouse_x,mouse_y);
-	checkbox_dropbox_icon.hovered = checkboxHover(checkbox_dropbox_icon.rec,mouse_x,mouse_y);
-	dropbox_1.hovered = checkboxHover(dropbox_1.rec,mouse_x,mouse_y);
-	dropbox_2.hovered = checkboxHover(dropbox_2.rec,mouse_x,mouse_y);
-	dropbox_3.hovered = checkboxHover(dropbox_3.rec,mouse_x,mouse_y);
 	checkbox_key.hovered = checkboxHover(checkbox_key.rec,mouse_x,mouse_y);
+
+	if(!checkbox_key.clicked){
+		checkbox_1.hovered = checkboxHover(checkbox_1.rec,mouse_x,mouse_y);
+		checkbox_dropbox_icon.hovered = checkboxHover(checkbox_dropbox_icon.rec,mouse_x,mouse_y);
+	}
+	if(checkbox_dropbox_icon.clicked){
+		dropbox_1.hovered = checkboxHover(dropbox_1.rec,mouse_x,mouse_y);
+		dropbox_2.hovered = checkboxHover(dropbox_2.rec,mouse_x,mouse_y);
+		dropbox_3.hovered = checkboxHover(dropbox_3.rec,mouse_x,mouse_y);
+	}
+	if(checkbox_key.clicked){
+		button_up.hovered = checkboxHover(button_up.rec,mouse_x,mouse_y);
+		button_down.hovered = checkboxHover(button_down.rec,mouse_x,mouse_y);
+		button_left.hovered = checkboxHover(button_left.rec,mouse_x,mouse_y);
+		button_right.hovered = checkboxHover(button_right.rec,mouse_x,mouse_y);
+	}
 }
 
 static void on_mouse_down() {
-	if (checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
+	if(checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
 	if(checkbox_dropbox_icon.hovered) checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
 	if(checkbox_key.hovered) checkbox_key.clicked = !checkbox_key.clicked;
+
 	if(dropbox_1.hovered){
 		dropbox_1.clicked = true; 
 		dropbox_2.clicked = false;
@@ -186,6 +246,31 @@ static void on_mouse_down() {
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = true;
+	}
+
+	if(button_up.hovered){
+		button_up.clicked = true;
+		button_down.clicked = false;
+		button_left.clicked = false;
+		button_right.clicked = false;
+	}
+	else if(button_down.hovered){
+		button_up.clicked = false;
+		button_down.clicked = true;
+		button_left.clicked = false;
+		button_right.clicked = false;
+	}
+	else if(button_left.hovered){
+		button_up.clicked = false;
+		button_down.clicked = false;
+		button_left.clicked = true;
+		button_right.clicked = false;
+	}
+	else if(button_right.hovered){
+		button_up.clicked = false;
+		button_down.clicked = false;
+		button_left.clicked = false;
+		button_right.clicked = true;
 	}
 }
 
