@@ -75,7 +75,12 @@ static void draw_dropboxs(){
 }
 
 static void draw_dropbox_icon(){
-	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Change Music2 !");
+	if(dropbox_2.clicked) 
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"The Greastest Showman");
+	else if(dropbox_3.clicked)
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"La La Land");
+	else
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,215,0,"Pacman");
 	
 	if(checkbox_dropbox_icon.clicked){
 		al_draw_scaled_bitmap(dropbox_icon,222,14,80,80,checkbox_dropbox_icon.rec.x,checkbox_dropbox_icon.rec.y,80,80,0);
