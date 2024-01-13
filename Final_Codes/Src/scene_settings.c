@@ -13,13 +13,10 @@
 static ALLEGRO_BITMAP* dropbox_icon;
 static Checkbox checkbox_1;
 static Checkbox checkbox_dropbox_icon;
-static Checkbox dropbox_1;
-static Checkbox dropbox_2;
-static Checkbox dropbox_3;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
-Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b){
+Checkbox createCheckbox(int x,int y,int w,int h,bool hover,bool click){
 	Checkbox checkbox;
 	checkbox.rec.x = x;
 	checkbox.rec.y = y;
@@ -27,8 +24,8 @@ Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b){
 	checkbox.rec.h = h;
 	checkbox.x2 = x+w;
 	checkbox.y2 = y+h;
-	checkbox.hovered = a;
-	checkbox.clicked = b;
+	checkbox.hovered = hover;
+	checkbox.clicked = click;
 	return checkbox;
 }
 
@@ -36,9 +33,9 @@ static void init(){
 	dropbox_icon = load_bitmap("Assets/music_icon.jpg");
 	checkbox_1 = createCheckbox(100,100,80,80,false,false);
 	checkbox_dropbox_icon = createCheckbox(100,200,80,80,false,false);
-	dropbox_1 = createCheckbox(200,300,300,50,false,false);
-	dropbox_2 = createCheckbox(200,360,300,50,false,false);
-	dropbox_3 = createCheckbox(200,420,300,50,false,false);
+	dropbox_1 = createCheckbox(200,300,300,50,dropbox_1.hovered,dropbox_1.clicked);
+	dropbox_2 = createCheckbox(200,360,300,50,dropbox_2.hovered,dropbox_2.clicked);
+	dropbox_3 = createCheckbox(200,420,300,50,dropbox_3.hovered,dropbox_3.clicked);
 }
 
 static void draw_dropboxs(){

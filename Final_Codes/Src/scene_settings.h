@@ -13,6 +13,10 @@ typedef struct Checkbox{
 	bool hovered;
 }Checkbox;
 
+static Checkbox dropbox_1;
+static Checkbox dropbox_2;
+static Checkbox dropbox_3;
+
 Checkbox createCheckbox(int x,int y,int w,int h,bool a,bool b);
 Scene scene_settings_create(void);
 
