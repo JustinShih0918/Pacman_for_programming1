@@ -2,6 +2,7 @@
 #include "pacman_obj.h"
 #include "map.h"
 #include "shared.h"
+#include "scene_game.h"
 /* Static variables */
 static const int start_grid_x = 25, start_grid_y = 25;		// where to put pacman at the beginning
 static const int fix_draw_pixel_offset_x = -3, fix_draw_pixel_offset_y = -3;  // draw offset 
@@ -57,8 +58,13 @@ static bool pacman_movable(const Pacman* pacman, const Map* M, Directions target
 		// for none UP, DOWN, LEFT, RIGHT direction u should return false.
 		return false;
 	}
-	if (is_wall_block(M, x, y) || is_room_block(M, x, y))
-		return false;
+	if(get_pacman_smash()){
+		if (false || is_room_block(M, x, y))
+			return false;
+	}else{
+		if (is_wall_block(M, x, y) || is_room_block(M, x, y))
+			return false;
+	}
 	
 	return true;
 }
@@ -184,10 +190,7 @@ void pacman_draw(Pacman* pman) {
 			drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 			draw_region, draw_region, 0
 		);
-		if(al_get_timer_count(pman->death_anim_counter)>=15){
-			count = 0;
-			preSec = 0;
-		}
+		
 	}
 }
 void pacman_move(Pacman* pacman, Map* M) {
@@ -265,4 +268,14 @@ void pacman_victory() {
 	stop_bgm(PACMAN_MOVESOUND_ID);
 	PACMAN_MOVESOUND_ID = play_audio(PACMAN_VICTORY_SOUND, effect_volume);
 }
+
+int get_pacmanDie_value(){
+	return count;
+}
+
+void change_pacmanDie_value(int img,int sec){
+	count = img;
+	preSec = sec;
+}
+
 

@@ -13,5 +13,6 @@ int64_t get_power_up_duration();
 */
 
 int64_t get_PowerUp_Time();
-
+bool get_ghost_stop();
+bool get_pacman_smash();
 #endif

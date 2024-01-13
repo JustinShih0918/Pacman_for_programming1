@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include "game.h"
 #include "map.h"
+#include "scene_game.h"
 #define QUEUE_SIZE 3000
 
 /*global variables*/
@@ -135,7 +136,6 @@ Map* create_map(const char * filepath) {
 				break;
 			case '.':
 				M->beansCount++;
-				
 				break;
 			default:
 				break;
@@ -185,7 +185,6 @@ void draw_map(Map const* M) {
 				case 'P':
 					draw_power_bean(M, row, col);
 					break;
-				
 				case '.':
 					draw_bean(M, row, col);
 					break;

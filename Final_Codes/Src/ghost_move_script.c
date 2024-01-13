@@ -1,22 +1,26 @@
-
 #include "ghost.h"
 #include "pacman_obj.h"
 #include "map.h"
+#include "scene_game.h"
 /* Shared variables */
 #define GO_OUT_TIME 256
 extern uint32_t GAME_TICK_CD;
 extern uint32_t GAME_TICK;
 extern ALLEGRO_TIMER* game_tick_timer;
 extern const int cage_grid_x, cage_grid_y;
-
 /* Declare static function prototypes */
 // static function reference: https://stackoverflow.com/questions/558122/what-is-a-static-function-in-c
+static void ghost_stop_script(Ghost* ghost);
 static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M);
 static void ghost_move_script_FREEDOM_shortest_path(Ghost* ghost, Map* M, Pacman* pman);
 static void ghost_move_script_BLOCKED(Ghost* ghost, Map* M);
 static void ghost_move_script_GO_IN(Ghost* ghost, Map* M);
 static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M);
 static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman* const pacman);
+
+static void ghost_stop_script(Ghost* ghost){
+	ghost_NextMove(ghost,NONE);
+}
 
 static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M) {
 	// TODO-HACKATHON 2-4: Uncomment the following code and finish pacman picking random direction.
@@ -174,6 +178,12 @@ static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman * const pa
 void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {
 	if (!movetime(ghost->speed))
 		return;
+	else if(get_ghost_stop()){
+		ghost_stop_script(ghost);
+		return;
+	}
+		
+
 		switch (ghost->status)
 		{
 		case BLOCKED:
@@ -236,6 +246,11 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 	// Finish
 	if (!movetime(ghost->speed))
 		return;
+	else if(get_ghost_stop()){
+		ghost_stop_script(ghost);
+		return;
+	}
+
 		switch (ghost->status)
 		{
 		case BLOCKED:

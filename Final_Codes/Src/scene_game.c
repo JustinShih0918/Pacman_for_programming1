@@ -26,12 +26,15 @@ int bean_ate_amount = 0;
 bool game_over = false;
 
 /* Internal variables*/
+static int preCode;
 static ALLEGRO_SAMPLE_ID Background_Music;
 static ALLEGRO_TIMER* power_up_timer;
 static const int power_up_duration = 10;
 static Pacman* pman;
 static Map* basic_map;
 static Ghost** ghosts;
+bool pacman_smash = false;
+bool ghost_stop = false;
 bool debug_mode = false;
 bool cheat_mode = false;
 /* Declare static function prototypes */
@@ -49,6 +52,9 @@ static void render_init_screen(void);
 static void draw_hitboxes(void);
 
 static void init(void) {
+	pacman_smash = false;
+	ghost_stop = false;
+	cheat_mode = false;
 	game_over = false;
 	game_main_Score = 0;
 	bean_ate_amount = 0;
@@ -129,6 +135,7 @@ static void checkItem(void) {
 	{
 	case '.':
 		pacman_eatItem(pman,'.');
+		basic_map->map[Grid_y][Grid_x] = ' ';
 		game_main_Score++;
 		bean_ate_amount++;
 		break;
@@ -136,6 +143,7 @@ static void checkItem(void) {
 		// Finish
 		// TODO-GC-PB: ease power bean
 		pacman_eatItem(pman,'P');
+		basic_map->map[Grid_y][Grid_x] = ' ';
 		al_set_timer_count(power_up_timer,0);
 		al_start_timer(power_up_timer);
 		// stop and reset power_up_timer value
@@ -147,8 +155,6 @@ static void checkItem(void) {
 
 	// TODO-HACKATHON 1-4: erase the item you eat from map
 	// Be careful, don't erase the wall block.
-	
-	basic_map->map[Grid_y][Grid_x] = ' ';
 	
 }
 static void status_update(void) {
@@ -216,6 +222,10 @@ static void status_update(void) {
 				ghost_collided(ghosts[i]);
 				game_main_Score+=20;
 			}
+			else if(cheat_mode){
+				pacman_eatGhost();
+				ghost_collided(ghosts[i]);
+			}
 			
 		}
 	}
@@ -237,10 +247,10 @@ static void update(void) {
 			al_start_timer(pman->death_anim_counter);
 			al_set_timer_count(pman->death_anim_counter,0);
 		}
-		if(al_get_timer_count(pman->death_anim_counter)>=15){
+		if(get_pacmanDie_value()>=300){
+			change_pacmanDie_value(0,0);
 			al_set_timer_count(pman->death_anim_counter,0);
 			al_stop_timer(pman->death_anim_counter);
-			al_rest(2);
 			game_change_scene(scene_menu_create());
 		}
 		
@@ -333,7 +343,15 @@ static void on_key_down(int key_code) {
 			pacman_NextMove(pman, LEFT);
 			break;
 		case ALLEGRO_KEY_S:
-			pacman_NextMove(pman, DOWN);
+			if(preCode == ALLEGRO_KEY_COMMAND){
+				ghost_stop = !ghost_stop;
+				if (ghost_stop)
+				printf("Ghost Stop\n");
+				else 
+				printf("cGhost Move\n");
+			}
+			else
+				pacman_NextMove(pman, DOWN);
 			break;
 		case ALLEGRO_KEY_D:
 			pacman_NextMove(pman, RIGHT);
@@ -345,13 +363,28 @@ static void on_key_down(int key_code) {
 			else 
 				printf("cheat mode off\n");
 			break;
+		case ALLEGRO_KEY_K:
+			if(cheat_mode){
+				for(int i = 0;i<GHOST_NUM;i++){
+					ghosts[i]->status = FLEE;
+				}
+			}
+			break;
 		case ALLEGRO_KEY_G:
 			debug_mode = !debug_mode;
+			break;
+		case ALLEGRO_KEY_L:
+			if(preCode == ALLEGRO_KEY_COMMAND)
+				pacman_smash = !pacman_smash;
+			if (pacman_smash)
+				printf("Pacman Can Cross The Wall\n");
+			else 
+				printf("Pacman Move Normally\n");
 			break;
 	default:
 		break;
 	}
-
+	preCode = key_code;
 }
 
 static void on_mouse_down(int btn, int x, int y, int dz) {
@@ -403,4 +436,12 @@ Scene scene_main_create(void) {
 
 int64_t get_PowerUp_Time(){
 	return al_get_timer_count(power_up_timer);
+}
+
+bool get_ghost_stop(){
+	return ghost_stop;
+}
+
+bool get_pacman_smash(){
+	return pacman_smash;
 }

@@ -36,5 +36,6 @@ void pacman_NextMove(Pacman* pacman, Directions next);
 void pacman_die();
 void pacman_eatGhost();
 void pacman_victory();
-
+int get_pacmanDie_value();
+void change_pacmanDie_value(int img,int sec);
 #endif // !PACMAN_OBJ_H
