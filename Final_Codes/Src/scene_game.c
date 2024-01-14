@@ -245,7 +245,7 @@ static void status_update(void) {
 				ghost_collided(ghosts[i]);
 				game_main_Score+=20;
 			}
-			else if(cheat_mode){
+			else if(cheat_mode && RecAreaOverlap(&pmanRec, &ghostRec)){
 				pacman_eatGhost();
 				ghost_collided(ghosts[i]);
 			}
@@ -297,7 +297,6 @@ static void draw(void) {
 	// Finish
 	
 	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),10,10,ALLEGRO_ALIGN_LEFT,"%s: %d","Your score",game_main_Score);
-	al_draw_textf(font_pirulen_32,al_map_rgb(255,255,0),300,10,ALLEGRO_ALIGN_LEFT,"%s: %d","bean_eaten",bean_ate_amount);
 
 	draw_map(basic_map);
 
