@@ -22,14 +22,16 @@ static Checkbox button_down;
 static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
+static ALLEGRO_TIMER* warning;
 static int up = ALLEGRO_KEY_W;
 static int down = ALLEGRO_KEY_S;
-static int left = ALLEGRO_KEY_D;
-static int right = ALLEGRO_KEY_A;
+static int left = ALLEGRO_KEY_A;
+static int right = ALLEGRO_KEY_D;
 static char text_up = 'W';
 static char text_down = 'S';
-static char text_left = 'D';
-static char text_right = 'A';
+static char text_left = 'A';
+static char text_right = 'D';
+static int warning_type = 0;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
@@ -122,7 +124,22 @@ static void init(){
 	button_left = createCheckbox(240,410,100,100,false,false);
 	button_right = createCheckbox(460,410,100,100,false,false);
 
+	warning = al_create_timer(1);
 	stop_bgm(settingBGM);
+}
+
+static void draw_warning(int warning_type){
+	switch (warning_type)
+	{
+	case 1:
+		al_draw_text(font_pirulen_24,al_map_rgb(255,0,0),10,10,0,"The key You Press is Not Allow, Please Choose Another One");
+		break;
+	case 2:
+		al_draw_text(font_pirulen_24,al_map_rgb(255,0,0),10,10,0,"Please turn off the Multiplayer Competititon Mode and try again");
+		break;
+	default:
+		break;
+	}
 }
 
 static void draw_dropboxs(){
@@ -275,6 +292,14 @@ static void draw(void ){
 	draw_checkbox_1();
 	draw_dropbox_icon();
 	draw_checkbox_key();
+	if(al_get_timer_started(warning)){
+		draw_warning(warning_type);
+	}
+
+	if(al_get_timer_count(warning) == 1){
+		al_stop_timer(warning);
+		al_set_timer_count(warning,0);
+	}
 }
 
 static bool checkboxHover(RecArea rec, int mouse_x, int mouse_y) {
@@ -317,7 +342,12 @@ static void on_mouse_down() {
 		button_left.clicked = false;
 		button_right.clicked = false;
 	}
-	else game_log("Please turn off the Multiplayer Competititon Mode and try again");
+	else if(checkbox_key.hovered && checkbox_1.clicked){
+		al_start_timer(warning);
+		warning_type = 2;
+		game_log("Please turn off the Multiplayer Competititon Mode and try again");
+	}
+
 
 	if(dropbox_1.hovered){
 		dropbox_1.clicked = true; 
@@ -377,7 +407,11 @@ static void on_key_down(int keycode) {
 			text_up = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
-		else game_log("The key You Press is Not Allow, Please Choose Another One");
+		else{
+			al_start_timer(warning);
+			warning_type = 1;
+			game_log("The key You Press is Not Allow, Please Choose Another One");
+		}
 	}
 	else if(button_down.clicked){
 		if(check_key(keycode)){
@@ -385,7 +419,11 @@ static void on_key_down(int keycode) {
 			text_down = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
-		else game_log("The key You Press is Not Allow, Please Choose Another One");
+		else{
+			al_start_timer(warning);
+			warning_type = 1;
+			game_log("The key You Press is Not Allow, Please Choose Another One");
+		}
 	}
 	else if(button_left.clicked){
 		if(check_key(keycode)){
@@ -393,7 +431,11 @@ static void on_key_down(int keycode) {
 			text_left = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
-		else game_log("The key You Press is Not Allow, Please Choose Another One");
+		else{
+			al_start_timer(warning);
+			warning_type = 1;
+			game_log("The key You Press is Not Allow, Please Choose Another One");
+		}
 	}
 	else if(button_right.clicked){
 		if(check_key(keycode)){
@@ -401,7 +443,11 @@ static void on_key_down(int keycode) {
 			text_right = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
-		else game_log("The key You Press is Not Allow, Please Choose Another One");
+		else{
+			al_start_timer(warning);
+			warning_type = 1;
+			game_log("The key You Press is Not Allow, Please Choose Another One");
+		}
 	}
 	switch (keycode) {
 		case ALLEGRO_KEY_ENTER:
@@ -414,6 +460,7 @@ static void on_key_down(int keycode) {
 
 static void destroy_setting(){
 	al_destroy_bitmap(dropbox_icon);
+	al_destroy_timer(warning);
 	stop_bgm(settingBGM);
 }
 
