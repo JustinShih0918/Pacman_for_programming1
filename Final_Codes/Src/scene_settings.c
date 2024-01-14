@@ -38,9 +38,7 @@ static int quote_type = 0;
 
 bool check_key(int key_code){
 	if(key_code == up||key_code == down||key_code == right||key_code == left) return false;
-	if(!checkbox_1.clicked){
-		if(key_code == ALLEGRO_KEY_K) return false;
-	}
+	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == 3) return false;
 	if(key_code<1) return false;
