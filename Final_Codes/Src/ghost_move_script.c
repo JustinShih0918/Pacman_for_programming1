@@ -249,7 +249,7 @@ void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {
 		ghost_stop_script(ghost);
 		return;
 	}
-	else if(getMode()){
+	else if(getMode() && ghost->typeFlag == get_ghost_control_index()){
 		ghost_move(ghost,M);
 		return;
 	}
@@ -321,7 +321,7 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 		ghost_stop_script(ghost);
 		return;
 	}
-	else if(getMode()){
+	else if(getMode() && ghost->typeFlag == get_ghost_control_index()){
 		ghost_move(ghost,M);
 		return;
 	}

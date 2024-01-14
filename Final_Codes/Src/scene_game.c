@@ -37,7 +37,6 @@ bool pacman_smash = false;
 bool ghost_stop = false;
 bool debug_mode = false;
 bool cheat_mode = false;
-int ghost_control_index = 0;
 /* Declare static function prototypes */
 static void init(void);
 static void step(void);
@@ -381,12 +380,14 @@ static void on_key_down(int key_code) {
 		// TODO-HACKATHON 1-1: Use allegro pre-defined enum ALLEGRO_KEY_<KEYNAME> to controll pacman movement
 		// we provided you a function `pacman_NextMove` to set the pacman's next move direction.
 		case ALLEGRO_KEY_S:
-			if(preCode == ALLEGRO_KEY_COMMAND){
-				ghost_stop = !ghost_stop;
-				if (ghost_stop)
-				printf("Ghost Stop\n");
-				else 
-				printf("cGhost Move\n");
+			if(cheat_mode){
+				if(preCode == ALLEGRO_KEY_COMMAND){
+					ghost_stop = !ghost_stop;
+					if (ghost_stop)
+					printf("Ghost Stop\n");
+					else 
+					printf("cGhost Move\n");
+				}
 			}
 			break;
 		case ALLEGRO_KEY_C:
@@ -402,9 +403,11 @@ static void on_key_down(int key_code) {
 			}
 			break;
 		case ALLEGRO_KEY_K:
-			for(int i = 0;i<GHOST_NUM;i++){
+			if(cheat_mode){
+				for(int i = 0;i<GHOST_NUM;i++){
 				ghosts[i]->status = GO_IN;
 				ghosts[i]->speed = 4;
+				}
 			}
 			break;
 		case ALLEGRO_KEY_G:
@@ -413,12 +416,14 @@ static void on_key_down(int key_code) {
 			debug_mode = !debug_mode;
 			break;
 		case ALLEGRO_KEY_L:
-			if(preCode == ALLEGRO_KEY_COMMAND)
+			if(cheat_mode){
+				if(preCode == ALLEGRO_KEY_COMMAND)
 				pacman_smash = !pacman_smash;
-			if (pacman_smash)
-				printf("Pacman Can Cross The Wall\n");
-			else 
-				printf("Pacman Move Normally\n");
+				if (pacman_smash)
+					printf("Pacman Can Cross The Wall\n");
+				else 
+					printf("Pacman Move Normally\n");
+			}
 			break;
 	default:
 		break;
@@ -491,3 +496,8 @@ void set_control_key(int up,int down,int left,int right){
 	controlLeft = left;
 	controlRight = right;
 }
+
+int get_ghost_control_index(){
+	return ghost_control_index;
+}
+
