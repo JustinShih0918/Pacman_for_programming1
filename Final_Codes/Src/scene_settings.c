@@ -22,14 +22,14 @@ static Checkbox button_down;
 static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
-static int up = ALLEGRO_KEY_UP;
-static int down = ALLEGRO_KEY_DOWN;
-static int left = ALLEGRO_KEY_LEFT;
-static int right = ALLEGRO_KEY_RIGHT;
-static char text_up = 'u';
-static char text_down = 'd';
-static char text_left = 'l';
-static char text_right = 'r';
+static int up = ALLEGRO_KEY_W;
+static int down = ALLEGRO_KEY_S;
+static int left = ALLEGRO_KEY_D;
+static int right = ALLEGRO_KEY_A;
+static char text_up = 'W';
+static char text_down = 'S';
+static char text_left = 'D';
+static char text_right = 'A';
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
@@ -310,13 +310,14 @@ static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
 static void on_mouse_down() {
 	if(checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
 	if(checkbox_dropbox_icon.hovered) checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
-	if(checkbox_key.hovered){
+	if(checkbox_key.hovered&&!checkbox_1.clicked){
 		checkbox_key.clicked = !checkbox_key.clicked;
 		button_up.clicked = false;
 		button_down.clicked = false;
 		button_left.clicked = false;
 		button_right.clicked = false;
 	}
+	else game_log("Please turn off the Multiplayer Competititon Mode and try again");
 
 	if(dropbox_1.hovered){
 		dropbox_1.clicked = true; 
