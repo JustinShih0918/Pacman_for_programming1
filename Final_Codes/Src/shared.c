@@ -15,8 +15,11 @@ ALLEGRO_SAMPLE* PACMAN_DEATH_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_EAT_GHOST_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_EAT_POWERBEAN_SOUND = NULL;
 ALLEGRO_SAMPLE* PACMAN_VICTORY_SOUND = NULL;
+ALLEGRO_SAMPLE* PACMAN_QUOTE = NULL;
 ALLEGRO_SAMPLE* Intersteller_themeMusic = NULL;
+ALLEGRO_SAMPLE* Intersteller_QUOTE = NULL;
 ALLEGRO_SAMPLE* MissionImpossible_themeMusic = NULL;
+ALLEGRO_SAMPLE* MissionImpossible_QUOTE = NULL;
 int fontSize = 30;
 float music_volume = 0.5;
 float effect_volume = 0.5;
@@ -41,12 +44,13 @@ void shared_init(void) {
 	PACMAN_EAT_GHOST_SOUND = load_audio("Assets/Music/Pacman/pacman_eatghost.ogg");
 	PACMAN_EAT_POWERBEAN_SOUND = load_audio("Assets/Music/Pacman/pacman_eatfruit.ogg");
 	PACMAN_VICTORY_SOUND = load_audio("Assets/Music/Pacman/pacman_victory.ogg");
-
+	PACMAN_QUOTE = load_audio("Assets/Music/Pacman/pacman_intermission.ogg");
 	//Intersteller music
 	Intersteller_themeMusic = load_audio("Assets/Music/Interstellar/interstellar_theme.ogg");
-
+	Intersteller_QUOTE = load_audio("Assets/Music/Interstellar/interstellar_quote.ogg");
 	//MissionImpossible music
 	MissionImpossible_themeMusic = load_audio("Assets/Music/Mission_Impossible/mission_impossible_theme.ogg");
+	MissionImpossible_QUOTE = load_audio("Assets/Music/Mission_Impossible/missionImpossible_quote.ogg");
 }
 
 void shared_destroy(void) {
@@ -60,6 +64,9 @@ void shared_destroy(void) {
 	al_destroy_sample(PACMAN_EAT_GHOST_SOUND);
 	al_destroy_sample(PACMAN_EAT_POWERBEAN_SOUND);
 	al_destroy_sample(PACMAN_VICTORY_SOUND);
+	al_destroy_sample(PACMAN_QUOTE);
 	al_destroy_sample(Intersteller_themeMusic);
+	al_destroy_sample(Intersteller_QUOTE);
 	al_destroy_sample(MissionImpossible_themeMusic);
+	al_destroy_sample(MissionImpossible_QUOTE);
 }

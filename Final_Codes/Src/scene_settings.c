@@ -23,7 +23,6 @@ static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
 static ALLEGRO_TIMER* warning;
-static ALLEGRO_TIMER* quotes;
 static int up = ALLEGRO_KEY_W;
 static int down = ALLEGRO_KEY_S;
 static int left = ALLEGRO_KEY_A;
@@ -126,9 +125,26 @@ static void init(){
 	button_down = createCheckbox(350,410,100,100,false,false);
 	button_left = createCheckbox(240,410,100,100,false,false);
 	button_right = createCheckbox(460,410,100,100,false,false);
-
 	warning = al_create_timer(1);
 	stop_bgm(settingBGM);
+}
+
+static void play_quote(int quote_type){
+	stop_bgm(settingBGM);
+	switch (quote_type)
+	{
+	case 1:
+		settingBGM = play_audio(PACMAN_QUOTE,0.3);
+		break;
+	case 2:
+		settingBGM = play_audio(MissionImpossible_QUOTE,2);
+		break;
+	case 3:
+		settingBGM = play_audio(Intersteller_QUOTE,3);
+		break;
+	case 4:
+		break;
+	}
 }
 
 static void draw_warning(int warning_type){
@@ -183,7 +199,7 @@ static void draw_dropboxs(){
 		al_draw_filled_rounded_rectangle(dropbox_4.rec.x,dropbox_4.rec.y,dropbox_4.x2,dropbox_4.y2,5,5,al_map_rgb(255, 255, 255));
 
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_1.rec.x+dropbox_1.x2)/2,(dropbox_1.rec.y+dropbox_1.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Pacman");
-	al_draw_text(font_pirulen_24,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-19,ALLEGRO_ALIGN_CENTRE,"Mission Impossible");
+	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Mission Impossible");
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_3.rec.x+dropbox_3.x2)/2,(dropbox_3.rec.y+dropbox_3.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Interstellar");
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_4.rec.x+dropbox_4.x2)/2,(dropbox_4.rec.y+dropbox_4.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Mute Music");
 }
@@ -337,13 +353,18 @@ static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
 
 static void on_mouse_down() {
 	if(checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
-	if(checkbox_dropbox_icon.hovered) checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
+	if(checkbox_dropbox_icon.hovered){
+		checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
+		stop_bgm(settingBGM);
+	}
 	if(checkbox_key.hovered&&!checkbox_1.clicked){
 		checkbox_key.clicked = !checkbox_key.clicked;
 		button_up.clicked = false;
 		button_down.clicked = false;
 		button_left.clicked = false;
 		button_right.clicked = false;
+		checkbox_dropbox_icon.clicked = false;
+		stop_bgm(settingBGM);
 	}
 	else if(checkbox_key.hovered && checkbox_1.clicked){
 		al_start_timer(warning);
@@ -351,30 +372,33 @@ static void on_mouse_down() {
 		game_log("Please turn off the Multiplayer Competititon Mode and try again");
 	}
 
-
 	if(dropbox_1.hovered){
 		dropbox_1.clicked = true; 
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = false;
 		dropbox_4.clicked = false;
+		play_quote(1);
 	}
 	else if(dropbox_2.hovered){
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = true;
 		dropbox_3.clicked = false;
 		dropbox_4.clicked = false;
+		play_quote(2);
 	}
 	else if(dropbox_3.hovered){
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = true;
 		dropbox_4.clicked = false;
+		play_quote(3);
 	}
 	else if(dropbox_4.hovered){
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = false;
 		dropbox_4.clicked = true;
+		play_quote(4);
 	}
 
 	if(button_up.hovered){
@@ -482,27 +506,3 @@ Scene scene_settings_create(void) {
 	game_log("Settings scene created");
 	return scene;
 }
-
-// TODO-Graphical_Widget:
-// Just suggestions, you can create your own usage.
-	// Selecting BGM:
-	// 1. Declare global variables for storing the BGM. (see `shared.h`, `shared.c`)
-	// 2. Load the BGM in `shared.c`.
-	// 3. Create dropdown menu for selecting BGM in setting scene, involving `scene_settings.c` and `scene_setting.h.
-	// 4. Switch and play the BGM if the corresponding option is selected.
-
-	// Adjusting Volume:
-	// 1. Declare global variables for storing the volume. (see `shared.h`, `shared.c`)
-	// 2. Create a slider for adjusting volume in setting scene, involving `scene_settings.c` and `scene_setting.h.
-		// 2.1. You may use checkbox to switch between mute and unmute.
-	// 3. Adjust the volume and play when the button is pressed.
-
-	// Selecting Map:
-	// 1. Preload the map to `shared.c`.
-	// 2. Create buttons(or dropdown menu) for selecting map in setting scene, involving `scene_settings.c` and `scene_setting.h.
-		// 2.1. For player experience, you may also create another scene between menu scene and game scene for selecting map.
-	// 3. Create buttons(or dropdown menu) for selecting map in setting scene, involving `scene_settings.c` and `scene_setting.h.
-	// 4. Switch and draw the map if the corresponding option is selected.
-		// 4.1. Suggestions: You may use `al_draw_bitmap` to draw the map for previewing. 
-							// But the map is too large to be drawn in original size. 
-							// You might want to modify the function to allow scaling.
