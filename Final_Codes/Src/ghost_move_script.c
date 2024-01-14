@@ -34,9 +34,10 @@ static void ghost_move(Ghost* ghost, Map* M){
 					ghost->status = GO_OUT;
 				break;
 			case FREEDOM:
+				ghost->status = GO_OUT;
 				break;
 			case GO_OUT:
-				ghost->status = FREEDOM;
+				ghost->status = GO_OUT;
 				break;
 			case GO_IN:
 				ghost_move_script_GO_IN(ghost, M);
@@ -47,7 +48,6 @@ static void ghost_move(Ghost* ghost, Map* M){
 				}
 				break;
 			case FLEE:
-				
 				break;
 			default:
 				break;
