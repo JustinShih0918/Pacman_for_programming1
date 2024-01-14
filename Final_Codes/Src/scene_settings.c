@@ -41,6 +41,7 @@ bool check_key(int key_code){
 	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == 3) return false;
+	if(key_code>=82 && key_code<=85) return true;
 	if(key_code<1) return false;
 	if(key_code>36) return false;
 
@@ -85,6 +86,11 @@ char set_text_key(int key_code){
 				break;
 			}
 		}
+	}else if(key_code>=82&&key_code<=85){
+		if(key_code == 82) text = 'l';
+		else if(key_code == 83) text = 'r';
+		else if(key_code == 84) text = 'u';
+		else if(key_code == 85) text = 'd';
 	}
 	return text;
 }
