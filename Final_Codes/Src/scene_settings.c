@@ -23,6 +23,7 @@ static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
 static ALLEGRO_TIMER* warning;
+static ALLEGRO_TIMER* quotes;
 static int up = ALLEGRO_KEY_W;
 static int down = ALLEGRO_KEY_S;
 static int left = ALLEGRO_KEY_A;
@@ -32,10 +33,12 @@ static char text_down = 'S';
 static char text_left = 'A';
 static char text_right = 'D';
 static int warning_type = 0;
+static int quote_type = 0;
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
 bool check_key(int key_code){
+	if(key_code == up||key_code == down||key_code == right||key_code == left) return false; 
 	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == 3) return false;
 	if(key_code<1) return false;
