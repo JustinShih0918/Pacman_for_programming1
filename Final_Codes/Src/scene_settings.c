@@ -4,6 +4,7 @@
 #include "scene_settings.h"
 #include "utility.h"
 #include "scene_game.h"
+#include "game.h"
 #include <allegro5/allegro_primitives.h>
 // Variables and functions with 'static' prefix at the top level of a
 // source file is only accessible in that file ("file scope", also
@@ -21,8 +22,44 @@ static Checkbox button_down;
 static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
+static int up = ALLEGRO_KEY_W;
+static int down = ALLEGRO_KEY_S;
+static int left = ALLEGRO_KEY_A;
+static int right = ALLEGRO_KEY_D;
+static char text_up = 'W';
+static char text_down = 'S';
+static char text_left = 'A';
+static char text_right = 'D';
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
+
+bool check_key(int key_code){
+	if(key_code == 3) return false;
+	if(key_code<1) return false;
+	if(key_code>36) return false;
+
+	return true;
+}
+
+char set_text_key(int key_code){
+	char text;
+	if(key_code>=1&&key_code<=26){
+		for(int i = 1;i<=26;i++){
+			if(key_code == i){
+				text = (i+64);
+				break;
+			}
+		}
+	}else if(key_code>=27&&key_code<=36){
+		for(int i = 27;i<=36;i++){
+			if(key_code == i){
+				text = (i+21);
+				break;
+			}
+		}
+	}
+	return text;
+}
 
 Checkbox createCheckbox(int x,int y,int w,int h,bool hover,bool click){
 	Checkbox checkbox;
@@ -140,32 +177,38 @@ static void draw_window(){
 
 	if(button_up.clicked){
 		al_draw_filled_rounded_rectangle(button_up.rec.x,button_up.rec.y,button_up.x2,button_up.y2,5,5,al_map_rgb(255,255,0));
+		al_draw_textf(font_pirulen_32,al_map_rgb(255,0,0),button_up.rec.x+47,button_up.rec.y+30,1,"%c",text_up);
 	}
 	else{
 		al_draw_filled_rounded_rectangle(button_up.rec.x,button_up.rec.y,button_up.x2,button_up.y2,5,5,al_map_rgb(255,255,255));
-		
+		al_draw_textf(font_pirulen_32,al_map_rgb(0,0,0),button_up.rec.x+47,button_up.rec.y+30,1,"%c",text_up);
 	}
-		
-	
+
 	if(button_down.clicked){
 		al_draw_filled_rounded_rectangle(button_down.rec.x,button_down.rec.y,button_down.x2,button_down.y2,5,5,al_map_rgb(255,255,0));
+		al_draw_textf(font_pirulen_32,al_map_rgb(255,0,0),button_down.rec.x+47,button_down.rec.y+30,1,"%c",text_down);
 	}
 	else{
 		al_draw_filled_rounded_rectangle(button_down.rec.x,button_down.rec.y,button_down.x2,button_down.y2,5,5,al_map_rgb(255,255,255));
+		al_draw_textf(font_pirulen_32,al_map_rgb(0,0,0),button_down.rec.x+47,button_down.rec.y+30,1,"%c",text_down);
 	}
 
 	if(button_left.clicked){
 		al_draw_filled_rounded_rectangle(button_left.rec.x,button_left.rec.y,button_left.x2,button_left.y2,5,5,al_map_rgb(255,255,0));
+		al_draw_textf(font_pirulen_32,al_map_rgb(255,0,0),button_left.rec.x+47,button_left.rec.y+30,1,"%c",text_left);
 	}
 	else{
 		al_draw_filled_rounded_rectangle(button_left.rec.x,button_left.rec.y,button_left.x2,button_left.y2,5,5,al_map_rgb(255,255,255));
+		al_draw_textf(font_pirulen_32,al_map_rgb(0,0,0),button_left.rec.x+47,button_left.rec.y+30,1,"%c",text_left);
 	}
 
 	if(button_right.clicked){
 		al_draw_filled_rounded_rectangle(button_right.rec.x,button_right.rec.y,button_right.x2,button_right.y2,5,5,al_map_rgb(255,255,0));
+		al_draw_textf(font_pirulen_32,al_map_rgb(255,0,0),button_right.rec.x+47,button_right.rec.y+30,1,"%c",text_right);
 	}
 	else{
 		al_draw_filled_rounded_rectangle(button_right.rec.x,button_right.rec.y,button_right.x2,button_right.y2,5,5,al_map_rgb(255,255,255));
+		al_draw_textf(font_pirulen_32,al_map_rgb(0,0,0),button_right.rec.x+47,button_right.rec.y+30,1,"%c",text_right);
 	}
 }
 
@@ -193,6 +236,7 @@ static void draw(void ){
 		ALLEGRO_ALIGN_CENTER,
 		"<ENTER> Back to menu"
 	);
+	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),10,10,0,"i can work");
 	draw_checkbox_1();
 	draw_dropbox_icon();
 	draw_checkbox_key();
@@ -230,7 +274,13 @@ static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
 static void on_mouse_down() {
 	if(checkbox_1.hovered)	checkbox_1.clicked = !checkbox_1.clicked;
 	if(checkbox_dropbox_icon.hovered) checkbox_dropbox_icon.clicked = !checkbox_dropbox_icon.clicked;
-	if(checkbox_key.hovered) checkbox_key.clicked = !checkbox_key.clicked;
+	if(checkbox_key.hovered){
+		checkbox_key.clicked = !checkbox_key.clicked;
+		button_up.clicked = false;
+		button_down.clicked = false;
+		button_left.clicked = false;
+		button_right.clicked = false;
+	}
 
 	if(dropbox_1.hovered){
 		dropbox_1.clicked = true; 
@@ -249,32 +299,61 @@ static void on_mouse_down() {
 	}
 
 	if(button_up.hovered){
-		button_up.clicked = true;
+		button_up.clicked = !button_up.clicked;
 		button_down.clicked = false;
 		button_left.clicked = false;
 		button_right.clicked = false;
 	}
 	else if(button_down.hovered){
 		button_up.clicked = false;
-		button_down.clicked = true;
+		button_down.clicked = !button_down.clicked;
 		button_left.clicked = false;
 		button_right.clicked = false;
 	}
 	else if(button_left.hovered){
 		button_up.clicked = false;
 		button_down.clicked = false;
-		button_left.clicked = true;
+		button_left.clicked = !button_left.clicked;
 		button_right.clicked = false;
 	}
 	else if(button_right.hovered){
 		button_up.clicked = false;
 		button_down.clicked = false;
 		button_left.clicked = false;
-		button_right.clicked = true;
+		button_right.clicked = !button_right.clicked;
 	}
 }
 
 static void on_key_down(int keycode) {
+	if(button_up.clicked){
+		if(check_key(keycode)){
+			up = keycode;
+			text_up = set_text_key(keycode);
+			set_control_key(up,down,left,right);
+		}
+		else game_log("The key You Press is Not Allow, Please Choose Another One");
+	}
+	else if(button_down.clicked){
+		if(check_key(keycode)){
+			down = keycode;
+			text_down = set_text_key(keycode);
+			set_control_key(up,down,left,right);
+		}
+	}
+	else if(button_left.clicked){
+		if(check_key(keycode)){
+			left = keycode;
+			text_left = set_text_key(keycode);
+			set_control_key(up,down,left,right);
+		}
+	}
+	else if(button_right.clicked){
+		if(check_key(keycode)){
+			right = keycode;
+			text_right = set_text_key(keycode);
+			set_control_key(up,down,left,right);
+		}
+	}
 	switch (keycode) {
 		case ALLEGRO_KEY_ENTER:
 			game_change_scene(scene_menu_create());
