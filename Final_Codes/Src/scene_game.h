@@ -11,6 +11,11 @@ static int controlDown;
 static int controlLeft;
 static int controlRight;
 
+static int ghost_controlUp;
+static int ghost_controlDown;
+static int ghost_controlLeft;
+static int ghost_controlRight;
+
 Scene scene_main_create(void);
 /*
 int64_t get_power_up_timer_tick();

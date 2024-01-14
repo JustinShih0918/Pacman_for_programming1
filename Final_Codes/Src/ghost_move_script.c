@@ -2,21 +2,88 @@
 #include "pacman_obj.h"
 #include "map.h"
 #include "scene_game.h"
+#include "scene_settings.h"
 /* Shared variables */
 #define GO_OUT_TIME 256
 extern uint32_t GAME_TICK_CD;
 extern uint32_t GAME_TICK;
 extern ALLEGRO_TIMER* game_tick_timer;
 extern const int cage_grid_x, cage_grid_y;
+extern bool game_over;
 /* Declare static function prototypes */
 // static function reference: https://stackoverflow.com/questions/558122/what-is-a-static-function-in-c
 static void ghost_stop_script(Ghost* ghost);
+static void ghost_move(Ghost* ghost, Map* M);
 static void ghost_move_script_FREEDOM_random(Ghost* ghost, Map* M);
 static void ghost_move_script_FREEDOM_shortest_path(Ghost* ghost, Map* M, Pacman* pman);
 static void ghost_move_script_BLOCKED(Ghost* ghost, Map* M);
 static void ghost_move_script_GO_IN(Ghost* ghost, Map* M);
 static void ghost_move_script_GO_OUT(Ghost* ghost, Map* M);
 static void ghost_move_script_FLEE(Ghost* ghost, Map* M, const Pacman* const pacman);
+
+static void ghost_move(Ghost* ghost, Map* M){
+	if (!movetime(ghost->speed))
+		return;
+	if (game_over)
+		return;
+
+		switch (ghost->status)
+		{
+			case BLOCKED:
+				if (al_get_timer_count(game_tick_timer) - ghost->go_in_time > GO_OUT_TIME)
+					ghost->status = GO_OUT;
+				break;
+			case FREEDOM:
+				break;
+			case GO_OUT:
+				ghost->status = FREEDOM;
+				break;
+			case GO_IN:
+				ghost_move_script_GO_IN(ghost, M);
+				if (M->map[ghost->objData.Coord.y][ghost->objData.Coord.x] == 'B') {
+					ghost->status = BLOCKED;
+					ghost->speed = 2; // reset the speed after back to the cage.
+					ghost->go_in_time = al_get_timer_count(game_tick_timer); 
+				}
+				break;
+			case FLEE:
+				
+				break;
+			default:
+				break;
+		}
+
+	int probe_x = ghost->objData.Coord.x, probe_y = ghost->objData.Coord.y;
+	if (ghost_movable(ghost, M, ghost->objData.nextTryMove,false)) 
+		ghost->objData.preMove = ghost->objData.nextTryMove;
+	else if (!ghost_movable(ghost, M, ghost->objData.preMove,false)) 
+		return;
+
+	switch (ghost->objData.preMove)
+	{
+	case UP:
+		ghost->objData.Coord.y -= 1;
+		ghost->objData.preMove = UP;
+		break;
+	case DOWN:
+		ghost->objData.Coord.y += 1;
+		ghost->objData.preMove = DOWN;
+		break;
+	case LEFT:
+		ghost->objData.Coord.x -= 1;
+		ghost->objData.preMove = LEFT;
+		break;
+	case RIGHT:
+		ghost->objData.Coord.x += 1;
+		ghost->objData.preMove = RIGHT;
+		break;
+	default:
+		break;
+	}
+	ghost->objData.facing = ghost->objData.preMove;
+	ghost->objData.moveCD = GAME_TICK_CD;
+}
+
 
 static void ghost_stop_script(Ghost* ghost){
 	ghost_NextMove(ghost,NONE);
@@ -182,6 +249,10 @@ void ghost_move_script_random(Ghost* ghost, Map* M, Pacman* pacman) {
 		ghost_stop_script(ghost);
 		return;
 	}
+	else if(getMode()){
+		ghost_move(ghost,M);
+		return;
+	}
 		
 
 		switch (ghost->status)
@@ -250,39 +321,44 @@ void ghost_move_script_shortest_path(Ghost* ghost, Map* M, Pacman* pacman) {
 		ghost_stop_script(ghost);
 		return;
 	}
+	else if(getMode()){
+		ghost_move(ghost,M);
+		return;
+	}
 
 		switch (ghost->status)
 		{
-		case BLOCKED:
-			ghost_move_script_BLOCKED(ghost, M);
-			if (al_get_timer_count(game_tick_timer) - ghost->go_in_time > GO_OUT_TIME)
-				ghost->status = GO_OUT;
-			break;
-		case FREEDOM:
-			mode_change++;
-			if(mode_change <= 16)
-				ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
-			else if(mode_change>16 && mode_change <= 32)
-				ghost_move_script_FREEDOM_random(ghost,M);
-			else mode_change = 0;
-			break;
-		case GO_OUT:
-			ghost_move_script_GO_OUT(ghost, M);
-			break;
-		case GO_IN:
-			ghost_move_script_GO_IN(ghost, M);
-			if (M->map[ghost->objData.Coord.y][ghost->objData.Coord.x] == 'B') {
-				ghost->status = BLOCKED;
-				ghost->speed = 2; // reset the speed after back to the cage.
-				ghost->go_in_time = al_get_timer_count(game_tick_timer); 
-			}
-			break;
-		case FLEE:
-			ghost_move_script_FLEE(ghost, M, pacman);
-			break;
-		default:
-			break;
+			case BLOCKED:
+				ghost_move_script_BLOCKED(ghost, M);
+				if (al_get_timer_count(game_tick_timer) - ghost->go_in_time > GO_OUT_TIME)
+					ghost->status = GO_OUT;
+				break;
+			case FREEDOM:
+				mode_change++;
+				if(mode_change <= 16)
+					ghost_move_script_FREEDOM_shortest_path(ghost, M, pacman);
+				else if(mode_change>16 && mode_change <= 32)
+					ghost_move_script_FREEDOM_random(ghost,M);
+				else mode_change = 0;
+				break;
+			case GO_OUT:
+				ghost_move_script_GO_OUT(ghost, M);
+				break;
+			case GO_IN:
+				ghost_move_script_GO_IN(ghost, M);
+				if (M->map[ghost->objData.Coord.y][ghost->objData.Coord.x] == 'B') {
+					ghost->status = BLOCKED;
+					ghost->speed = 2; // reset the speed after back to the cage.
+					ghost->go_in_time = al_get_timer_count(game_tick_timer); 
+				}
+				break;
+			case FLEE:
+				ghost_move_script_FLEE(ghost, M, pacman);
+				break;
+			default:
+				break;
 		}
+	
 
 		if(ghost_movable(ghost, M, ghost->objData.nextTryMove, false)){
 			ghost->objData.preMove = ghost->objData.nextTryMove;

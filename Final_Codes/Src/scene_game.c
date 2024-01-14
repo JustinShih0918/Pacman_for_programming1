@@ -37,6 +37,7 @@ bool pacman_smash = false;
 bool ghost_stop = false;
 bool debug_mode = false;
 bool cheat_mode = false;
+int ghost_control_index = 0;
 /* Declare static function prototypes */
 static void init(void);
 static void step(void);
@@ -113,7 +114,31 @@ static void init(void) {
 		break;
 	}
 
+	if(getMode()){
+		controlUp = ALLEGRO_KEY_UP;
+		controlDown = ALLEGRO_KEY_DOWN;
+		controlLeft = ALLEGRO_KEY_LEFT;
+		controlRight = ALLEGRO_KEY_RIGHT;
+
+		ghost_controlUp = ALLEGRO_KEY_W;
+		ghost_controlLeft = ALLEGRO_KEY_A;
+		ghost_controlDown = ALLEGRO_KEY_S;
+		ghost_controlRight = ALLEGRO_KEY_D;
+	}
+	else{
+		controlUp = get_control_key('U');
+		controlDown = get_control_key('D');
+		controlRight = get_control_key('R');
+		controlLeft = get_control_key('L');
+	}
+
 	return;
+}
+
+static void change_control_ghost(){
+	ghost_control_index++;
+	if(ghost_control_index>=GHOST_NUM)
+		ghost_control_index = 0;
 }
 
 static void step(void) {
@@ -180,7 +205,6 @@ static void status_update(void) {
 			for(int i = 0;i<GHOST_NUM;i++){
 				ghost_toggle_FLEE(ghosts[i],true);
 			}
-			//game_log("%d\n",get_PowerUp_Time());
 		}
 		
 	}
@@ -332,6 +356,17 @@ static void destroy(void) {
 }
 
 static void on_key_down(int key_code) {
+	if(getMode()){
+		if(key_code == ghost_controlUp)
+			ghost_NextMove(ghosts[ghost_control_index],UP);
+		else if(key_code == ghost_controlDown)
+			ghost_NextMove(ghosts[ghost_control_index],DOWN);
+		else if(key_code == ghost_controlLeft)
+			ghost_NextMove(ghosts[ghost_control_index],LEFT);
+		else if(key_code == ghost_controlRight)
+			ghost_NextMove(ghosts[ghost_control_index],RIGHT);
+	}
+
 	if(key_code == controlUp)
 		pacman_NextMove(pman,UP);
 	else if(key_code == controlDown)
@@ -355,17 +390,21 @@ static void on_key_down(int key_code) {
 			}
 			break;
 		case ALLEGRO_KEY_C:
-			cheat_mode = !cheat_mode;
-			if (cheat_mode)
-				printf("cheat mode on\n");
-			else 
-				printf("cheat mode off\n");
+			if(getMode()){
+				change_control_ghost();
+			}
+			else{
+				cheat_mode = !cheat_mode;
+				if (cheat_mode)
+					printf("cheat mode on\n");
+				else 
+					printf("cheat mode off\n");
+			}
 			break;
 		case ALLEGRO_KEY_K:
-			if(cheat_mode){
-				for(int i = 0;i<GHOST_NUM;i++){
-					ghosts[i]->status = FLEE;
-				}
+			for(int i = 0;i<GHOST_NUM;i++){
+				ghosts[i]->status = GO_IN;
+				ghosts[i]->speed = 4;
 			}
 			break;
 		case ALLEGRO_KEY_G:

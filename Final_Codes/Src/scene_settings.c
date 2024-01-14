@@ -22,23 +22,46 @@ static Checkbox button_down;
 static Checkbox button_right;
 static Checkbox button_left;
 static ALLEGRO_SAMPLE_ID settingBGM;
-static int up = ALLEGRO_KEY_W;
-static int down = ALLEGRO_KEY_S;
-static int left = ALLEGRO_KEY_A;
-static int right = ALLEGRO_KEY_D;
-static char text_up = 'W';
-static char text_down = 'S';
-static char text_left = 'A';
-static char text_right = 'D';
+static int up = ALLEGRO_KEY_UP;
+static int down = ALLEGRO_KEY_DOWN;
+static int left = ALLEGRO_KEY_LEFT;
+static int right = ALLEGRO_KEY_RIGHT;
+static char text_up = 'u';
+static char text_down = 'd';
+static char text_left = 'l';
+static char text_right = 'r';
 // TODO-IF: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
 bool check_key(int key_code){
+	if(key_code == ALLEGRO_KEY_K) return false;
 	if(key_code == 3) return false;
 	if(key_code<1) return false;
 	if(key_code>36) return false;
 
 	return true;
+}
+
+bool getMode(){
+	return checkbox_1.clicked;
+}
+
+int get_control_key(char d){
+	switch (d)
+	{
+	case 'U':
+		return up;
+		break;
+	case 'D':
+		return down;
+		break;
+	case 'L':
+		return left;
+		break;
+	case 'R':
+		return right;
+		break;
+	}
 }
 
 char set_text_key(int key_code){
@@ -75,7 +98,7 @@ Checkbox createCheckbox(int x,int y,int w,int h,bool hover,bool click){
 }
 
 int getDropbox(){
-	if(checkbox_1.clicked) return 4;
+	if(dropbox_4.clicked) return 4;
 	else if(dropbox_1.clicked) return 1;
 	else if(dropbox_2.clicked) return 2;
 	else if(dropbox_3.clicked) return 3;
@@ -90,6 +113,7 @@ static void init(){
 	dropbox_1 = createCheckbox(200,350,300,50,dropbox_1.hovered,dropbox_1.clicked);
 	dropbox_2 = createCheckbox(200,410,300,50,dropbox_2.hovered,dropbox_2.clicked);
 	dropbox_3 = createCheckbox(200,470,300,50,dropbox_3.hovered,dropbox_3.clicked);
+	dropbox_4 = createCheckbox(200,530,300,50,dropbox_4.hovered,dropbox_4.clicked);
 
 	checkbox_key = createCheckbox(100,80,600,50,false,false);
 	window = createCheckbox(100,120,600,600,false,false);
@@ -102,16 +126,16 @@ static void init(){
 }
 
 static void draw_dropboxs(){
-	if(dropbox_2.hovered||dropbox_3.hovered)
+	if(dropbox_2.hovered||dropbox_3.hovered||dropbox_4.hovered)
 		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(255, 255, 255));
 	else if(dropbox_1.hovered)
 		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(135, 206, 235));
-	else if(dropbox_2.clicked||dropbox_3.clicked)
+	else if(dropbox_2.clicked||dropbox_3.clicked||dropbox_4.clicked)
 		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(255, 255, 255));
 	else
 		al_draw_filled_rounded_rectangle(dropbox_1.rec.x,dropbox_1.rec.y,dropbox_1.x2,dropbox_1.y2,5,5,al_map_rgb(135, 206, 235));
 	
-	if(dropbox_1.hovered||dropbox_3.hovered)
+	if(dropbox_1.hovered||dropbox_3.hovered||dropbox_4.hovered)
 		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(255, 255, 255));
 	else if(dropbox_2.clicked)
 		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(135, 206, 235));
@@ -120,7 +144,7 @@ static void draw_dropboxs(){
 	else
 		al_draw_filled_rounded_rectangle(dropbox_2.rec.x,dropbox_2.rec.y,dropbox_2.x2,dropbox_2.y2,5,5,al_map_rgb(255, 255, 255));
 
-	if(dropbox_2.hovered||dropbox_1.hovered)
+	if(dropbox_2.hovered||dropbox_1.hovered||dropbox_4.hovered)
 		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(255, 255, 255));
 	else if(dropbox_3.clicked)
 		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(135, 206, 235));
@@ -129,9 +153,19 @@ static void draw_dropboxs(){
 	else
 		al_draw_filled_rounded_rectangle(dropbox_3.rec.x,dropbox_3.rec.y,dropbox_3.x2,dropbox_3.y2,5,5,al_map_rgb(255, 255, 255));
 	
+	if(dropbox_2.hovered||dropbox_1.hovered||dropbox_3.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_4.rec.x,dropbox_4.rec.y,dropbox_4.x2,dropbox_4.y2,5,5,al_map_rgb(255, 255, 255));
+	else if(dropbox_4.clicked)
+		al_draw_filled_rounded_rectangle(dropbox_4.rec.x,dropbox_4.rec.y,dropbox_4.x2,dropbox_4.y2,5,5,al_map_rgb(135, 206, 235));
+	else if(dropbox_4.hovered)
+		al_draw_filled_rounded_rectangle(dropbox_4.rec.x,dropbox_4.rec.y,dropbox_4.x2,dropbox_4.y2,5,5,al_map_rgb(135, 206, 235));
+	else
+		al_draw_filled_rounded_rectangle(dropbox_4.rec.x,dropbox_4.rec.y,dropbox_4.x2,dropbox_4.y2,5,5,al_map_rgb(255, 255, 255));
+
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_1.rec.x+dropbox_1.x2)/2,(dropbox_1.rec.y+dropbox_1.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Pacman");
 	al_draw_text(font_pirulen_24,al_map_rgb(0,0,0),(dropbox_2.rec.x+dropbox_2.x2)/2,(dropbox_2.rec.y+dropbox_2.y2)/2-19,ALLEGRO_ALIGN_CENTRE,"Mission Impossible");
 	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_3.rec.x+dropbox_3.x2)/2,(dropbox_3.rec.y+dropbox_3.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Interstellar");
+	al_draw_text(font_pirulen_32,al_map_rgb(0,0,0),(dropbox_4.rec.x+dropbox_4.x2)/2,(dropbox_4.rec.y+dropbox_4.y2)/2-25,ALLEGRO_ALIGN_CENTRE,"Mute Music");
 }
 
 static void draw_dropbox_icon(){
@@ -139,6 +173,8 @@ static void draw_dropbox_icon(){
 		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,265,0,"Mission Impossible");
 	else if(dropbox_3.clicked)
 		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,265,0,"Interstellar");
+	else if(dropbox_4.clicked)
+		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,265,0,"Mute Music");
 	else
 		al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,265,0,"Pacman");
 	
@@ -157,7 +193,7 @@ static void draw_dropbox_icon(){
 
 
 static void draw_checkbox_1(){
-	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,165,0,"Mute the Music !");
+	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),200,165,0,"Multiplayer Competition Mode");
 
 	if(checkbox_1.clicked){
 		al_draw_filled_rounded_rectangle(checkbox_1.rec.x,checkbox_1.rec.y,checkbox_1.x2,checkbox_1.y2,5,5,al_map_rgb(255,255,255));
@@ -236,7 +272,6 @@ static void draw(void ){
 		ALLEGRO_ALIGN_CENTER,
 		"<ENTER> Back to menu"
 	);
-	al_draw_text(font_pirulen_32,al_map_rgb(255,255,255),10,10,0,"i can work");
 	draw_checkbox_1();
 	draw_dropbox_icon();
 	draw_checkbox_key();
@@ -262,6 +297,7 @@ static void on_mouse_move(int a, int mouse_x, int mouse_y, int f){
 		dropbox_1.hovered = checkboxHover(dropbox_1.rec,mouse_x,mouse_y);
 		dropbox_2.hovered = checkboxHover(dropbox_2.rec,mouse_x,mouse_y);
 		dropbox_3.hovered = checkboxHover(dropbox_3.rec,mouse_x,mouse_y);
+		dropbox_4.hovered = checkboxHover(dropbox_4.rec,mouse_x,mouse_y);
 	}
 	if(checkbox_key.clicked){
 		button_up.hovered = checkboxHover(button_up.rec,mouse_x,mouse_y);
@@ -286,16 +322,25 @@ static void on_mouse_down() {
 		dropbox_1.clicked = true; 
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = false;
+		dropbox_4.clicked = false;
 	}
 	else if(dropbox_2.hovered){
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = true;
 		dropbox_3.clicked = false;
+		dropbox_4.clicked = false;
 	}
 	else if(dropbox_3.hovered){
 		dropbox_1.clicked = false;
 		dropbox_2.clicked = false;
 		dropbox_3.clicked = true;
+		dropbox_4.clicked = false;
+	}
+	else if(dropbox_4.hovered){
+		dropbox_1.clicked = false;
+		dropbox_2.clicked = false;
+		dropbox_3.clicked = false;
+		dropbox_4.clicked = true;
 	}
 
 	if(button_up.hovered){
@@ -339,6 +384,7 @@ static void on_key_down(int keycode) {
 			text_down = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
+		else game_log("The key You Press is Not Allow, Please Choose Another One");
 	}
 	else if(button_left.clicked){
 		if(check_key(keycode)){
@@ -346,6 +392,7 @@ static void on_key_down(int keycode) {
 			text_left = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
+		else game_log("The key You Press is Not Allow, Please Choose Another One");
 	}
 	else if(button_right.clicked){
 		if(check_key(keycode)){
@@ -353,6 +400,7 @@ static void on_key_down(int keycode) {
 			text_right = set_text_key(keycode);
 			set_control_key(up,down,left,right);
 		}
+		else game_log("The key You Press is Not Allow, Please Choose Another One");
 	}
 	switch (keycode) {
 		case ALLEGRO_KEY_ENTER:
